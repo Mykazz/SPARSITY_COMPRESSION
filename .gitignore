@@ -1,0 +1,23 @@
+# Ignore generated / large folders
+compressed/
+data/
+logs/
+
+# Keep results folder
+!results/
+!results/**
+
+# Python junk
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+
+# System/editor junk
+.DS_Store
+.vscode/
+.idea/

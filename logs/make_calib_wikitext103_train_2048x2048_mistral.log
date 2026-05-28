@@ -1,0 +1,15 @@
+====================================================================================================
+Calibration token builder
+====================================================================================================
+Model/tokenizer : mistralai/Mistral-7B-Instruct-v0.3
+Output          : data/calib_wikitext103_train_2048x2048_mistral.pt
+Target shape    : (2048, 2048) = 4,194,304 tokens
+Source          : HF dataset wikitext/wikitext-103-raw-v1 split=train
+  docs=10,000 tokens=1,157,415/4,194,304 tok/s=214,307
+  docs=20,000 tokens=2,310,933/4,194,304 tok/s=327,343
+  docs=30,000 tokens=3,504,743/4,194,304 tok/s=399,256
+Saved           : data/calib_wikitext103_train_2048x2048_mistral.pt
+Meta            : data/calib_wikitext103_train_2048x2048_mistral.pt.meta.json
+Docs seen       : 36,511
+Elapsed         : 11s
+Tokens/sec      : 414,404

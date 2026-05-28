@@ -1,0 +1,176 @@
+Pavydinis eval naudojimas:
+
+cd /workspace/Mykolas/SPARSITY_COMPRESSION
+mkdir -p logs results
+
+CUDA_VISIBLE_DEVICES=0 \
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:128 \
+/venv/main/bin/python eval_universal.py \
+  --model_id compressed/mistral_elsa_s80_v9c_owl05_kd60_tanneal_cleanup64_seq384_exact80_fp16 \
+  --input_file data/eval_wikitext103_test_shared_250k.txt \
+  --load_mode fp \
+  --dtype float16 \
+  --device cuda \
+  --block_size 1024 \
+  --stride 1024 \
+  --batch_size 1 \
+  --attn_implementation sdpa \
+  --low_cpu_mem_usage \
+  --save_json results/mistral_elsa_s80_v9c_owl05_kd60_tanneal_cleanup64_seq384_exact80_fp16_eval.json \
+  2>&1 | tee logs/mistral_elsa_s80_v9c_owl05_kd60_tanneal_cleanup64_seq384_exact80_fp16_eval.log
+
+Pavyzdinis kompresijos naudojimas
+
+
+cd /workspace/Mykolas/SPARSITY_COMPRESSION
+
+# ============================================================
+# Best next v9c run after PPL=18.96
+# ============================================================
+
+SCRIPT="elsa_mistral_windowed_v9c_owl_lowmem_exactbudget.py"
+CALIB="data/calib_wikitext103_train_2048x2048_mistral.pt"
+
+RUN="mistral_elsa_s80_v9c_owl05_kd60_tanneal_cleanup64_seq512_exact80_fp16"
+OUT="compressed/${RUN}"
+STATE="compressed/_state_${RUN}"
+KDCACHE="data/kd_cache_mistral_v03_wt103_2048x2048_top64_temp1"
+LOG="logs/${RUN}.log"
+
+mkdir -p compressed logs results data "$KDCACHE"
+
+echo "=== Check script/calibration ==="
+test -f "$SCRIPT" || { echo "STOP: missing $SCRIPT in project root"; exit 1; }
+test -f "$CALIB" || { echo "STOP: missing calibration file: $CALIB"; exit 1; }
+
+/venv/main/bin/python -m py_compile "$SCRIPT" || exit 1
+
+echo "=== Remove only this run's old output/state ==="
+rm -rf "$OUT" "$STATE"
+rm -f "$LOG"
+
+echo "=== Disk/RAM before run ==="
+df -h .
+free -h
+
+avail_gb=$(df -BG . | awk 'NR==2 {gsub("G","",$4); print $4}')
+echo "Available disk: ${avail_gb} GB"
+
+if [ "$avail_gb" -lt 78 ]; then
+  echo "STOP: not enough free disk. Need about 78GB+ free for fp16 z/u + fp16 Adam/Fisher + HF output."
+  echo ""
+  echo "Largest compressed folders:"
+  du -h --max-depth=1 compressed 2>/dev/null | sort -h | tail -30
+  echo ""
+  echo "Largest state/data folders:"
+  du -h --max-depth=1 state data 2>/dev/null | sort -h | tail -30
+  exit 1
+fi
+
+echo "=== Starting ${RUN} ==="
+
+CUDA_VISIBLE_DEVICES=0 \
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:128,garbage_collection_threshold:0.8 \
+/venv/main/bin/python "$SCRIPT" \
+  --model_id mistralai/Mistral-7B-Instruct-v0.3 \
+  --calib "$CALIB" \
+  --out "$OUT" \
+  --state_dir "$STATE" \
+  --save_mode hf_pretrained \
+  --max_shard_size 2GB \
+  \
+  --sparsity 0.80 \
+  --pattern unstructured \
+  --init_method wanda \
+  --wanda_calib_batches 128 \
+  \
+  --owl_outlier_pct 0.5 \
+  \
+  --kd_alpha 0.60 \
+  --kd_topk 64 \
+  --kd_temperature 1.0 \
+  --kd_temperature_start 2.0 \
+  --kd_temperature_warmup_frac 0.30 \
+  --kd_alpha_cleanup 0.60 \
+  --kd_cache_dir "$KDCACHE" \
+  --kd_build_batch_size 1 \
+  \
+  --dynamic_sparsity fisher_damage \
+  --dynamic_start_pass 2 \
+  --dynamic_alpha 0.50 \
+  --dynamic_sparsity_min 0.72 \
+  --dynamic_sparsity_max 0.87 \
+  --dynamic_metric_sparsity 0.80 \
+  \
+  --hard_sparse_forward \
+  --active_block_window 1 \
+  --admm_passes 4 \
+  --steps_per_window 128 \
+  --projection_interval 16 \
+  --project_at_window_end \
+  \
+  --lr 7e-5 \
+  --lr_schedule linear \
+  --min_lr_ratio 0.10 \
+  --admm_lambda 5e-5 \
+  --lambda_schedule constant \
+  --lambda_warmup_frac 0 \
+  --penalty_normalization sum \
+  --adaptive_lambda \
+  --adaptive_lambda_drift_threshold 0.05 \
+  --adaptive_lambda_grow 1.15 \
+  --adaptive_lambda_cap 8.0 \
+  \
+  --dual_lr 1.0 \
+  --dual_clip 5.0 \
+  --admm_diff_clip 5.0 \
+  \
+  --fisher_warmup_steps 24 \
+  --fisher_power 0.75 \
+  --fisher_blend_magnitude 0.05 \
+  --fisher_max_factor 100 \
+  \
+  --batch_size 1 \
+  --grad_accum_steps 4 \
+  --max_seq_len 1024 \
+  --crop_mode random \
+  \
+  --model_dtype float16 \
+  --active_state_dtype float16 \
+  --state_format fp16 \
+  --x_state_format fp16 \
+  --optimizer_state_format fp16 \
+  --projection_device cpu \
+  \
+  --max_grad_norm 0.50 \
+  --grad_value_clip 0.0 \
+  --update_value_clip 0.25 \
+  --optimizer_state_clip 1e6 \
+  \
+  --cleanup_steps 64 \
+  --cleanup_max_seq_len 512 \
+  --cleanup_lr 5e-5 \
+  --cleanup_lr_schedule cosine \
+  --cleanup_min_lr_ratio 0.10 \
+  --cleanup_max_grad_norm 0.50 \
+  --cleanup_log_interval 4 \
+  --cleanup_no_master_weights \
+  --cleanup_grad_accum_steps 1 \
+  --cleanup_skip_on_oom \
+  --cleanup_probe_each_window \
+  --cleanup_probe_batches 4 \
+  --learn_output_scale \
+  --output_scale_lr_mult 2.0 \
+  \
+  --initial_probe_batches 8 \
+  --pass_probe_batches 8 \
+  --final_probe_batches 64 \
+  \
+  --attn_implementation sdpa \
+  --gradient_checkpointing \
+  --low_cpu_mem_usage \
+  --reset_state \
+  2>&1 | tee "$LOG"
+
+echo "=== Important final lines ==="
+grep -E "OWL|forced_keep|cleanup_max_seq_len|cleanup probe|OOM|skipped|Final selected-layer sparsity|Final sparse calibration probe|Cleanup phase complete|Done|Total time|CUDA memory" "$LOG" | tail -200

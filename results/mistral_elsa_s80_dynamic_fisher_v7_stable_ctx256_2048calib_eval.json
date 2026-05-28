@@ -1,0 +1,43 @@
+{
+  "input_file": "data/eval_wikitext103_test_shared_250k.txt",
+  "model_id": "compressed/mistral_elsa_s80_dynamic_fisher_v7_stable_ctx256_2048calib",
+  "model_variant": "original_fp",
+  "compressed": null,
+  "raw_chars": 992803,
+  "tokenized_length": 250000,
+  "block_size": 1024,
+  "stride": 1024,
+  "batch_size": 1,
+  "load_mode": "fp",
+  "dtype": "float16",
+  "add_bos_token": false,
+  "cache_dequantized": false,
+  "tokenization_stats": {
+    "read_seconds": 0.007465839385986328,
+    "tokenize_seconds": 0.5993728637695312,
+    "raw_chars": 992803,
+    "tokens": 250000,
+    "chars_per_second_read": 132979421.15705435,
+    "tokens_per_second_tokenize": 417102.6336222808
+  },
+  "metrics": {
+    "mean_loss": 3.678631103547241,
+    "perplexity": 39.59215939366086,
+    "bits_per_token": 5.3071428503475,
+    "top1_accuracy": 0.3358613434453738,
+    "tokens_evaluated": 249999,
+    "batches_evaluated": 245,
+    "windows_evaluated": 245,
+    "processed_windows": 245,
+    "expected_windows": 245,
+    "stride_used": 1024,
+    "evaluation_mode": "non-overlapping",
+    "elapsed_seconds": 69.66712665557861,
+    "tokens_per_second": 3588.4786986543713,
+    "windows_per_second": 3.5167231915740502,
+    "batches_per_second": 3.5167231915740502
+  },
+  "total_script_seconds": 105.31455087661743,
+  "cuda_memory": "allocated=13.51GB reserved=13.85GB peak=13.82GB",
+  "compression_info": {}
+}

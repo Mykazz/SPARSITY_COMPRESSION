@@ -1,23 +1,35 @@
-# Ignore generated / large folders
-compressed/
-data/
-logs/
-
-# Keep results folder
-!results/
-!results/**
-
-# Python junk
+# Python / notebooks
 __pycache__/
-*.py[cod]
+*.pyc
 .ipynb_checkpoints/
 
-# Environments
-.venv/
-venv/
-env/
+# Large model/checkpoint outputs
+compressed/
+state/
+*.pt
+*.pth
+*.safetensors
+*.bin
+*.gguf
 
-# System/editor junk
-.DS_Store
-.vscode/
-.idea/
+# Calibration / KD cache data
+data/*.pt
+data/*.pt.meta.json
+data/kd_cache*/
+data/_kd_cache*/
+data/**/probs/
+data/**/idx/
+
+# Logs: keep folder, ignore large logs by default
+logs/*.log
+logs/*.txt
+
+# Keep small eval results
+!results/
+!results/*.json
+!data/.gitkeep
+!logs/.gitkeep
+!results/.gitkeep
+
+# Misc
+token_mailer/

@@ -1,0 +1,658 @@
+[warn] --hard_sparse_forward enables sparse-z-as-x mode. This is NOT pure ELSA and is known to be worse at 80%+ sparsity. Consider dropping the flag.
+====================================================================================================
+Windowed ELSA / ELSA-L ADMM Sparsification
+====================================================================================================
+Model id             : mistralai/Mistral-7B-Instruct-v0.3
+Device               : cuda
+Model dtype          : torch.float16
+Active state dtype   : torch.float16
+ADMM z/u format      : fp16
+Persistent x format  : disabled
+Adam/Fisher format   : fp16
+Projection device    : cpu
+Target sparsity      : 80.00%
+Pattern              : unstructured
+CUDA memory          : alloc=0.00GB reserved=0.00GB max=0.00GB
+
+Loading tokenizer and model...
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|                                                                                                                        | 0/291 [00:00<?, ?it/s]Loading weights:   5%|█████▎                                                                                                        | 14/291 [00:00<00:01, 139.52it/s]Loading weights:  11%|███████████▋                                                                                                  | 31/291 [00:00<00:02, 107.31it/s]Loading weights:  16%|█████████████████▊                                                                                            | 47/291 [00:00<00:01, 126.36it/s]Loading weights:  21%|███████████████████████                                                                                       | 61/291 [00:00<00:01, 127.28it/s]Loading weights:  26%|█████████████████████████████                                                                                 | 77/291 [00:00<00:01, 137.55it/s]Loading weights:  32%|██████████████████████████████████▊                                                                           | 92/291 [00:00<00:01, 140.29it/s]Loading weights:  37%|████████████████████████████████████████                                                                     | 107/291 [00:00<00:01, 140.30it/s]Loading weights:  42%|█████████████████████████████████████████████▋                                                               | 122/291 [00:00<00:01, 142.58it/s]Loading weights:  48%|████████████████████████████████████████████████████                                                         | 139/291 [00:01<00:01, 122.01it/s]Loading weights:  52%|████████████████████████████████████████████████████████▉                                                    | 152/291 [00:01<00:01, 124.05it/s]Loading weights:  57%|██████████████████████████████████████████████████████████████▌                                              | 167/291 [00:01<00:00, 129.93it/s]Loading weights:  62%|███████████████████████████████████████████████████████████████████▊                                         | 181/291 [00:01<00:00, 132.48it/s]Loading weights:  67%|█████████████████████████████████████████████████████████████████████████                                    | 195/291 [00:01<00:00, 133.23it/s]Loading weights:  72%|██████████████████████████████████████████████████████████████████████████████▎                              | 209/291 [00:01<00:00, 133.43it/s]Loading weights:  79%|█████████████████████████████████████████████████████████████████████████████████████▊                       | 229/291 [00:01<00:00, 121.51it/s]Loading weights:  84%|███████████████████████████████████████████████████████████████████████████████████████████                  | 243/291 [00:01<00:00, 125.77it/s]Loading weights:  89%|████████████████████████████████████████████████████████████████████████████████████████████████▋            | 258/291 [00:01<00:00, 131.82it/s]Loading weights:  94%|██████████████████████████████████████████████████████████████████████████████████████████████████████▋      | 274/291 [00:02<00:00, 139.31it/s]Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 291/291 [00:02<00:00, 133.63it/s]
+Enabling gradient checkpointing...
+Model loaded. CUDA memory: alloc=13.50GB reserved=13.52GB max=13.50GB
+
+Loading calibration tokens...
+Loaded calibration tokens: (2048, 2048)
+
+Freeing sparse-target model temporarily to load dense teacher for KD cache build...
+
+Building KD teacher top-K cache at data/kd_cache_mistral_v03_wt103_2048x2048_top128_temp1
+  rows=2048 T=2048 K=128 dtype=fp16 device=cuda
+  loading dense teacher...
+Loading weights:   0%|                                                                                                                        | 0/291 [00:00<?, ?it/s]Loading weights:   4%|████▉                                                                                                         | 13/291 [00:00<00:02, 105.95it/s]Loading weights:  11%|███████████▋                                                                                                  | 31/291 [00:00<00:01, 144.43it/s]Loading weights:  16%|██████████████████▏                                                                                           | 48/291 [00:00<00:01, 155.47it/s]Loading weights:  22%|████████████████████████▏                                                                                     | 64/291 [00:00<00:01, 154.15it/s]Loading weights:  27%|██████████████████████████████▏                                                                               | 80/291 [00:00<00:01, 154.93it/s]Loading weights:  33%|████████████████████████████████████▎                                                                         | 96/291 [00:00<00:01, 152.06it/s]Loading weights:  38%|█████████████████████████████████████████▉                                                                   | 112/291 [00:00<00:01, 122.20it/s]Loading weights:  45%|████████████████████████████████████████████████▋                                                            | 130/291 [00:00<00:01, 135.13it/s]Loading weights:  50%|██████████████████████████████████████████████████████▎                                                      | 145/291 [00:01<00:01, 138.48it/s]Loading weights:  55%|███████████████████████████████████████████████████████████▉                                                 | 160/291 [00:01<00:00, 140.46it/s]Loading weights:  60%|█████████████████████████████████████████████████████████████████▌                                           | 175/291 [00:01<00:00, 138.97it/s]Loading weights:  66%|████████████████████████████████████████████████████████████████████████▎                                    | 193/291 [00:01<00:00, 123.65it/s]Loading weights:  73%|███████████████████████████████████████████████████████████████████████████████                              | 211/291 [00:01<00:00, 137.42it/s]Loading weights:  78%|████████████████████████████████████████████████████████████████████████████████████▋                        | 226/291 [00:01<00:00, 140.54it/s]Loading weights:  83%|██████████████████████████████████████████████████████████████████████████████████████████▎                  | 241/291 [00:01<00:00, 141.84it/s]Loading weights:  88%|███████████████████████████████████████████████████████████████████████████████████████████████▉             | 256/291 [00:01<00:00, 141.73it/s]Loading weights:  93%|█████████████████████████████████████████████████████████████████████████████████████████████████████▌       | 271/291 [00:01<00:00, 143.46it/s]Loading weights:  98%|███████████████████████████████████████████████████████████████████████████████████████████████████████████▏ | 286/291 [00:02<00:00, 144.85it/s]Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 291/291 [00:02<00:00, 142.80it/s]
+  teacher loaded. vocab=32768  cuda=alloc=13.50GB reserved=13.52GB max=13.50GB
+    cached rows 0-0/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 16-16/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 32-32/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 48-48/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 64-64/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 80-80/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 96-96/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 112-112/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 128-128/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 144-144/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 160-160/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 176-176/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 192-192/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 208-208/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 224-224/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 240-240/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 256-256/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 272-272/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 288-288/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 304-304/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 320-320/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 336-336/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 352-352/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 368-368/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 384-384/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 400-400/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 416-416/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 432-432/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 448-448/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 464-464/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 480-480/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 496-496/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 512-512/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 528-528/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 544-544/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 560-560/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 576-576/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 592-592/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 608-608/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 624-624/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 640-640/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 656-656/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 672-672/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 688-688/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 704-704/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 720-720/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 736-736/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 752-752/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 768-768/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 784-784/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 800-800/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 816-816/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 832-832/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 848-848/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 864-864/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 880-880/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 896-896/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 912-912/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 928-928/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 944-944/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 960-960/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 976-976/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 992-992/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1008-1008/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1024-1024/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1040-1040/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1056-1056/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1072-1072/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1088-1088/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1104-1104/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1120-1120/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1136-1136/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1152-1152/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1168-1168/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1184-1184/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1200-1200/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1216-1216/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1232-1232/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1248-1248/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1264-1264/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1280-1280/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1296-1296/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1312-1312/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1328-1328/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1344-1344/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1360-1360/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1376-1376/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1392-1392/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1408-1408/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1424-1424/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1440-1440/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1456-1456/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1472-1472/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1488-1488/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1504-1504/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1520-1520/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1536-1536/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1552-1552/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1568-1568/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1584-1584/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1600-1600/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1616-1616/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1632-1632/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1648-1648/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1664-1664/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1680-1680/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1696-1696/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1712-1712/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1728-1728/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1744-1744/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1760-1760/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1776-1776/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1792-1792/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1808-1808/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1824-1824/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1840-1840/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1856-1856/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1872-1872/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1888-1888/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1904-1904/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1920-1920/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1936-1936/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1952-1952/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1968-1968/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 1984-1984/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 2000-2000/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 2016-2016/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+    cached rows 2032-2032/2048  cuda=alloc=13.89GB reserved=14.19GB max=14.13GB
+KD cache built in 15m26s. Meta at data/kd_cache_mistral_v03_wt103_2048x2048_top128_temp1/meta.json
+
+Reloading sparse-target model after KD cache build...
+Loading weights:   0%|                                                                                                                        | 0/291 [00:00<?, ?it/s]Loading weights:   5%|█████▎                                                                                                         | 14/291 [00:00<00:03, 88.85it/s]Loading weights:  11%|███████████▋                                                                                                  | 31/291 [00:00<00:02, 122.67it/s]Loading weights:  16%|██████████████████▏                                                                                           | 48/291 [00:00<00:01, 140.62it/s]Loading weights:  22%|███████████████████████▊                                                                                      | 63/291 [00:00<00:02, 108.16it/s]Loading weights:  27%|█████████████████████████████▍                                                                                | 78/291 [00:00<00:01, 119.44it/s]Loading weights:  31%|██████████████████████████████████▍                                                                           | 91/291 [00:00<00:01, 121.53it/s]Loading weights:  36%|██████████████████████████████████████▉                                                                      | 104/291 [00:00<00:01, 123.18it/s]Loading weights:  41%|████████████████████████████████████████████▉                                                                | 120/291 [00:00<00:01, 130.35it/s]Loading weights:  46%|██████████████████████████████████████████████████▏                                                          | 134/291 [00:01<00:01, 133.06it/s]Loading weights:  51%|███████████████████████████████████████████████████████▍                                                     | 148/291 [00:01<00:01, 133.88it/s]Loading weights:  57%|██████████████████████████████████████████████████████████████▏                                              | 166/291 [00:01<00:01, 119.74it/s]Loading weights:  63%|████████████████████████████████████████████████████████████████████▉                                        | 184/291 [00:01<00:00, 131.43it/s]Loading weights:  69%|███████████████████████████████████████████████████████████████████████████▋                                 | 202/291 [00:01<00:00, 143.43it/s]Loading weights:  76%|██████████████████████████████████████████████████████████████████████████████████▍                          | 220/291 [00:01<00:00, 124.00it/s]Loading weights:  82%|█████████████████████████████████████████████████████████████████████████████████████████▏                   | 238/291 [00:01<00:00, 134.39it/s]Loading weights:  87%|███████████████████████████████████████████████████████████████████████████████████████████████▏             | 254/291 [00:01<00:00, 140.22it/s]Loading weights:  92%|████████████████████████████████████████████████████████████████████████████████████████████████████▊        | 269/291 [00:02<00:00, 141.92it/s]Loading weights:  98%|██████████████████████████████████████████████████████████████████████████████████████████████████████████▍  | 284/291 [00:02<00:00, 116.02it/s]Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 291/291 [00:02<00:00, 128.76it/s]
+KD cache ready: K=128, T=2048, rows=2048, build_temp=1.000
+KD alpha=0.650  temperature=1.000
+
+Decoder layers found: model.layers, count=32
+Selected linears: 224
+  - model.layers.0.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.0.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.0.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.0.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.0.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.0.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.0.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.1.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.1.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.1.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.1.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.1.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.1.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.1.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.2.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.2.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.2.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.2.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.2.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.2.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.2.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.3.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.3.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.3.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.3.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.3.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.3.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.3.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.4.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.4.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.4.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.4.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.4.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.4.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.4.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.5.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.5.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.5.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.5.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.5.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.5.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.5.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.6.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.6.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.6.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.6.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.6.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.6.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.6.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.7.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.7.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.7.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.7.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.7.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.7.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.7.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.8.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.8.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.8.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.8.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.8.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.8.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.8.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.9.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.9.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.9.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.9.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.9.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.9.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.9.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.10.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.10.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.10.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.10.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.10.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.10.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.10.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.11.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.11.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.11.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.11.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.11.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.11.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.11.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.12.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.12.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.12.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.12.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.12.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.12.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.12.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.13.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.13.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.13.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.13.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.13.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.13.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.13.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.14.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.14.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.14.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.14.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.14.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.14.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.14.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.15.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.15.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.15.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.15.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.15.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.15.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.15.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.16.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.16.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.16.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.16.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.16.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.16.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.16.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.17.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.17.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.17.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.17.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.17.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.17.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.17.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.18.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.18.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.18.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.18.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.18.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.18.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.18.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.19.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.19.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.19.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.19.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.19.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.19.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.19.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.20.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.20.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.20.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.20.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.20.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.20.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.20.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.21.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.21.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.21.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.21.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.21.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.21.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.21.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.22.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.22.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.22.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.22.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.22.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.22.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.22.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.23.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.23.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.23.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.23.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.23.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.23.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.23.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.24.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.24.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.24.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.24.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.24.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.24.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.24.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.25.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.25.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.25.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.25.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.25.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.25.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.25.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.26.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.26.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.26.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.26.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.26.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.26.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.26.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.27.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.27.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.27.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.27.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.27.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.27.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.27.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.28.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.28.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.28.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.28.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.28.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.28.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.28.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.29.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.29.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.29.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.29.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.29.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.29.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.29.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.30.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.30.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.30.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.30.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.30.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.30.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.30.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+  - model.layers.31.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.31.self_attn.k_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.31.self_attn.v_proj: shape=(1024, 4096) weights=4,194,304
+  - model.layers.31.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.31.mlp.gate_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.31.mlp.up_proj: shape=(14336, 4096) weights=58,720,256
+  - model.layers.31.mlp.down_proj: shape=(4096, 14336) weights=58,720,256
+Total selected weights: 6,979,321,856
+
+Active windows: 16
+  window 00: layers=14 weights=436,207,616
+  window 01: layers=14 weights=436,207,616
+  window 02: layers=14 weights=436,207,616
+  window 03: layers=14 weights=436,207,616
+  window 04: layers=14 weights=436,207,616
+  window 05: layers=14 weights=436,207,616
+  window 06: layers=14 weights=436,207,616
+  window 07: layers=14 weights=436,207,616
+  window 08: layers=14 weights=436,207,616
+  window 09: layers=14 weights=436,207,616
+  window 10: layers=14 weights=436,207,616
+  window 11: layers=14 weights=436,207,616
+  window 12: layers=14 weights=436,207,616
+  window 13: layers=14 weights=436,207,616
+  window 14: layers=14 weights=436,207,616
+  window 15: layers=14 weights=436,207,616
+
+Dynamic ELSA/Fisher sparsity is enabled. Pass 1 starts uniform; profile will be computed after the requested warmup pass.
+
+Collecting per-channel activation norms for Wanda warm-start (batches=128, max_seq_len=2048)...
+    activation calibration: batch 16/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+    activation calibration: batch 32/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+    activation calibration: batch 48/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+    activation calibration: batch 64/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+    activation calibration: batch 80/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+    activation calibration: batch 96/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+    activation calibration: batch 112/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+    activation calibration: batch 128/128  cuda=[alloc=13.51GB reserved=13.89GB max=14.13GB]
+Wanda activation pass done in 1m00s; got norms for 224/224 layers. CUDA: alloc=13.51GB reserved=13.52GB max=14.13GB
+
+Initializing ADMM states...
+  [1/224] model.layers.0.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [2/224] model.layers.0.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [3/224] model.layers.0.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [4/224] model.layers.0.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [5/224] model.layers.0.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [6/224] model.layers.0.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [7/224] model.layers.0.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [8/224] model.layers.1.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [9/224] model.layers.1.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [10/224] model.layers.1.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [11/224] model.layers.1.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [12/224] model.layers.1.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [13/224] model.layers.1.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [14/224] model.layers.1.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [15/224] model.layers.2.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [16/224] model.layers.2.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [17/224] model.layers.2.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [18/224] model.layers.2.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [19/224] model.layers.2.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [20/224] model.layers.2.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [21/224] model.layers.2.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [22/224] model.layers.3.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [23/224] model.layers.3.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [24/224] model.layers.3.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [25/224] model.layers.3.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [26/224] model.layers.3.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [27/224] model.layers.3.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [28/224] model.layers.3.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [29/224] model.layers.4.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [30/224] model.layers.4.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [31/224] model.layers.4.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [32/224] model.layers.4.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [33/224] model.layers.4.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [34/224] model.layers.4.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [35/224] model.layers.4.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [36/224] model.layers.5.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [37/224] model.layers.5.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [38/224] model.layers.5.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [39/224] model.layers.5.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [40/224] model.layers.5.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [41/224] model.layers.5.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [42/224] model.layers.5.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [43/224] model.layers.6.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [44/224] model.layers.6.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [45/224] model.layers.6.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [46/224] model.layers.6.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [47/224] model.layers.6.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [48/224] model.layers.6.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [49/224] model.layers.6.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [50/224] model.layers.7.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [51/224] model.layers.7.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [52/224] model.layers.7.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [53/224] model.layers.7.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [54/224] model.layers.7.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [55/224] model.layers.7.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [56/224] model.layers.7.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [57/224] model.layers.8.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [58/224] model.layers.8.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [59/224] model.layers.8.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [60/224] model.layers.8.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [61/224] model.layers.8.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [62/224] model.layers.8.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [63/224] model.layers.8.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [64/224] model.layers.9.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [65/224] model.layers.9.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [66/224] model.layers.9.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [67/224] model.layers.9.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [68/224] model.layers.9.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [69/224] model.layers.9.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [70/224] model.layers.9.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [71/224] model.layers.10.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [72/224] model.layers.10.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [73/224] model.layers.10.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [74/224] model.layers.10.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [75/224] model.layers.10.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [76/224] model.layers.10.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [77/224] model.layers.10.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [78/224] model.layers.11.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [79/224] model.layers.11.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [80/224] model.layers.11.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [81/224] model.layers.11.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [82/224] model.layers.11.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [83/224] model.layers.11.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [84/224] model.layers.11.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [85/224] model.layers.12.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [86/224] model.layers.12.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [87/224] model.layers.12.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [88/224] model.layers.12.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [89/224] model.layers.12.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [90/224] model.layers.12.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [91/224] model.layers.12.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [92/224] model.layers.13.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [93/224] model.layers.13.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [94/224] model.layers.13.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [95/224] model.layers.13.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [96/224] model.layers.13.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [97/224] model.layers.13.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [98/224] model.layers.13.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [99/224] model.layers.14.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [100/224] model.layers.14.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [101/224] model.layers.14.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [102/224] model.layers.14.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [103/224] model.layers.14.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [104/224] model.layers.14.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [105/224] model.layers.14.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [106/224] model.layers.15.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [107/224] model.layers.15.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [108/224] model.layers.15.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [109/224] model.layers.15.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [110/224] model.layers.15.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [111/224] model.layers.15.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [112/224] model.layers.15.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [113/224] model.layers.16.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [114/224] model.layers.16.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [115/224] model.layers.16.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [116/224] model.layers.16.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [117/224] model.layers.16.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [118/224] model.layers.16.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [119/224] model.layers.16.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [120/224] model.layers.17.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [121/224] model.layers.17.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [122/224] model.layers.17.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [123/224] model.layers.17.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [124/224] model.layers.17.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [125/224] model.layers.17.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [126/224] model.layers.17.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [127/224] model.layers.18.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [128/224] model.layers.18.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [129/224] model.layers.18.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [130/224] model.layers.18.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [131/224] model.layers.18.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [132/224] model.layers.18.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [133/224] model.layers.18.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [134/224] model.layers.19.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [135/224] model.layers.19.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [136/224] model.layers.19.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [137/224] model.layers.19.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [138/224] model.layers.19.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [139/224] model.layers.19.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [140/224] model.layers.19.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [141/224] model.layers.20.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [142/224] model.layers.20.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [143/224] model.layers.20.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [144/224] model.layers.20.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [145/224] model.layers.20.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [146/224] model.layers.20.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [147/224] model.layers.20.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [148/224] model.layers.21.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [149/224] model.layers.21.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [150/224] model.layers.21.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [151/224] model.layers.21.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [152/224] model.layers.21.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [153/224] model.layers.21.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [154/224] model.layers.21.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [155/224] model.layers.22.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [156/224] model.layers.22.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [157/224] model.layers.22.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [158/224] model.layers.22.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [159/224] model.layers.22.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [160/224] model.layers.22.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [161/224] model.layers.22.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [162/224] model.layers.23.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [163/224] model.layers.23.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [164/224] model.layers.23.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [165/224] model.layers.23.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [166/224] model.layers.23.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [167/224] model.layers.23.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [168/224] model.layers.23.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [169/224] model.layers.24.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [170/224] model.layers.24.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [171/224] model.layers.24.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [172/224] model.layers.24.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [173/224] model.layers.24.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [174/224] model.layers.24.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [175/224] model.layers.24.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [176/224] model.layers.25.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [177/224] model.layers.25.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [178/224] model.layers.25.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [179/224] model.layers.25.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [180/224] model.layers.25.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [181/224] model.layers.25.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [182/224] model.layers.25.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [183/224] model.layers.26.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [184/224] model.layers.26.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [185/224] model.layers.26.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [186/224] model.layers.26.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [187/224] model.layers.26.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [188/224] model.layers.26.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [189/224] model.layers.26.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [190/224] model.layers.27.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [191/224] model.layers.27.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [192/224] model.layers.27.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [193/224] model.layers.27.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [194/224] model.layers.27.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [195/224] model.layers.27.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [196/224] model.layers.27.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [197/224] model.layers.28.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [198/224] model.layers.28.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [199/224] model.layers.28.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [200/224] model.layers.28.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [201/224] model.layers.28.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [202/224] model.layers.28.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [203/224] model.layers.28.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [204/224] model.layers.29.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [205/224] model.layers.29.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [206/224] model.layers.29.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [207/224] model.layers.29.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [208/224] model.layers.29.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [209/224] model.layers.29.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [210/224] model.layers.29.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [211/224] model.layers.30.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [212/224] model.layers.30.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [213/224] model.layers.30.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [214/224] model.layers.30.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [215/224] model.layers.30.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [216/224] model.layers.30.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [217/224] model.layers.30.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [218/224] model.layers.31.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [219/224] model.layers.31.self_attn.k_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [220/224] model.layers.31.self_attn.v_proj: shape=(1024, 4096) kept=838,861/4,194,304 sparsity=80.00% init=wanda
+  [221/224] model.layers.31.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [222/224] model.layers.31.mlp.gate_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [223/224] model.layers.31.mlp.up_proj: shape=(14336, 4096) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+  [224/224] model.layers.31.mlp.down_proj: shape=(4096, 14336) kept=11,744,051/58,720,256 sparsity=80.00% init=wanda
+ADMM state initialization finished in 6m57s.
+
+[OWL v9b] computing global top-0.500% outlier mask (source=current) across 224 layers...
+  [OWL] sampled 32/224 layers
+  [OWL] sampled 64/224 layers
+  [OWL] sampled 96/224 layers
+  [OWL] sampled 128/224 layers

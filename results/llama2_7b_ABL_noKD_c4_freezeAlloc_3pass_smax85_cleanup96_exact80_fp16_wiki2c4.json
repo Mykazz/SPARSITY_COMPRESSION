@@ -1,0 +1,18 @@
+{
+  "model_id": "compressed/llama2_7b_ABL_noKD_c4_freezeAlloc_3pass_smax85_cleanup96_exact80_fp16",
+  "data_tag": "llama2",
+  "seqlen": 2048,
+  "dtype": "float16",
+  "wikitext2": {
+    "perplexity": 23.591542277415492,
+    "windows": 166,
+    "seqlen": 2048,
+    "seconds": 46.41131138801575
+  },
+  "c4": {
+    "perplexity": 19.838202135421835,
+    "windows": 256,
+    "seqlen": 2048,
+    "seconds": 74.0617401599884
+  }
+}

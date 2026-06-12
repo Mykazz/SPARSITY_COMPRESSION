@@ -1,0 +1,18 @@
+{
+  "model_id": "meta-llama/Llama-2-13b-hf",
+  "data_tag": "llama2",
+  "seqlen": 2048,
+  "dtype": "float16",
+  "wikitext2": {
+    "perplexity": 4.883652822431193,
+    "windows": 166,
+    "seqlen": 2048,
+    "seconds": 100.4318106174469
+  },
+  "c4": {
+    "perplexity": 6.72516087291023,
+    "windows": 256,
+    "seqlen": 2048,
+    "seconds": 160.9252154827118
+  }
+}

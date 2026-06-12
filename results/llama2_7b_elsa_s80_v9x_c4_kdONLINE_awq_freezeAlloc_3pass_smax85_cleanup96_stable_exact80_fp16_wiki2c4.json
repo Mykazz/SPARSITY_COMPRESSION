@@ -1,0 +1,18 @@
+{
+  "model_id": "compressed/llama2_7b_elsa_s80_v9x_c4_kdONLINE_awq_freezeAlloc_3pass_smax85_cleanup96_stable_exact80_fp16",
+  "data_tag": "llama2",
+  "seqlen": 2048,
+  "dtype": "float16",
+  "wikitext2": {
+    "perplexity": 20.55207627814735,
+    "windows": 166,
+    "seqlen": 2048,
+    "seconds": 46.33499717712402
+  },
+  "c4": {
+    "perplexity": 18.889219023898505,
+    "windows": 256,
+    "seqlen": 2048,
+    "seconds": 73.80830192565918
+  }
+}

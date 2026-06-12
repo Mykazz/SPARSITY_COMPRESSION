@@ -105,11 +105,6 @@ PLUS updated defaults reflecting v9b learnings:
    --cleanup_no_master_weights default OFF -> ON  (always-on cleanup OOM saving)
    --cleanup_grad_accum_steps default -1 -> 1   (lower activation peak in cleanup)
 
-All v9b safety nets are preserved (low-mem OWL, exact-budget OWL, cleanup
-OOM guard, between-window CUDA reclamation, cleanup_max_seq_len).
-
-------------------------------------------------------------------------
-
 v9b — Patch of v9 with two OWL fixes:
 
   1. LOW-MEMORY OWL  (compute_owl_force_keep_masks):
@@ -129,7 +124,6 @@ v9b — Patch of v9 with two OWL fixes:
      top-k pick. The kept-count remains exactly round((1-sparsity)*N) and
      OWL positions are picked first within that fixed budget.
 
-Same CLI flags as v9. Drop-in replacement of elsa_mistral_windowed_v9_cleanup_owl.py.
 
 v9 — ELSA windowed ADMM with post-projection cleanup, OWL outlier protection,
      adaptive lambda, KD temperature schedule, and learnable per-output scale.
@@ -178,7 +172,7 @@ Recommended 3090 command for 80% Mistral-7B target:
     --learn_output_scale --adaptive_lambda --max_seq_len 1024
     --active_block_window 2 --grad_accum_steps 4
 
-Paper-aligned Windowed ELSA / ELSA-L ADMM for Hugging Face decoder-only LLMs.
+
 
 v8 changes vs v7 ("stable_fisher_fixed"):
     - Wanda activation-aware warm-start (--init_method {magnitude, wanda})
@@ -202,10 +196,6 @@ v8 changes vs v7 ("stable_fisher_fixed"):
     - hard_sparse_forward is still supported but warns; pure ELSA (dense x +
       sparse z) is the new default.
 
-Target use-case (unchanged):
-    - Mistral/LLaMA/Qwen decoder-only models on a single GPU such as RTX 3090.
-    - High unstructured sparsity experiments: 70%, 80%, 90%.
-    - Numerical robustness, low-precision state storage, windowed training.
 
 Recommended RTX 3090 settings (see CLI defaults):
     --model_dtype float16 --active_block_window 2

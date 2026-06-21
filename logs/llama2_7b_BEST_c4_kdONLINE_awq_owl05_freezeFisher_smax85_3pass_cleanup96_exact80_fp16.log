@@ -1,0 +1,1199 @@
+[warn] --hard_sparse_forward enables sparse-z-as-x mode. This is NOT pure ELSA and is known to be worse at 80%+ sparsity. Consider dropping the flag.
+====================================================================================================
+Windowed ELSA / ELSA-L ADMM Sparsification
+====================================================================================================
+Model id             : meta-llama/Llama-2-7b-hf
+Device               : cuda
+Model dtype          : torch.float16
+Active state dtype   : torch.float16
+ADMM z/u format      : fp16
+Persistent x format  : disabled
+Adam/Fisher format   : fp16
+Projection device    : cpu
+Target sparsity      : 80.00%
+Pattern              : unstructured
+CUDA memory          : alloc=0.00GB reserved=0.00GB max=0.00GB
+
+Loading tokenizer and model...
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|                                                                                                                                       | 0/291 [00:00<?, ?it/s]Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 291/291 [00:00<00:00, 4343.58it/s]
+Enabling gradient checkpointing...
+Model loaded. CUDA memory: alloc=12.55GB reserved=12.56GB max=12.55GB
+
+Loading calibration tokens...
+Loaded calibration tokens: (4096, 2048)
+[heldout] reserved last 256 rows as a never-trained held-out probe set; training rows now 3840.
+
+[KD online] loading a resident dense teacher for full-vocab KD (top-K cache disabled)...
+Loading weights:   0%|                                                                                                                                       | 0/291 [00:00<?, ?it/s]Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 291/291 [00:00<00:00, 4167.22it/s]
+[KD online] dense teacher resident. alloc=25.10GB reserved=25.12GB max=25.10GB
+[KD online] NOTE: teacher + student both live on GPU; if you OOM at --max_seq_len 2048, drop to 1024.
+
+Decoder layers found: model.layers, count=32
+Selected linears: 224
+  - model.layers.0.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.0.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.0.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.0.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.0.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.0.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.0.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.1.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.1.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.1.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.1.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.1.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.1.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.1.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.2.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.2.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.2.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.2.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.2.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.2.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.2.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.3.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.3.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.3.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.3.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.3.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.3.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.3.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.4.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.4.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.4.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.4.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.4.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.4.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.4.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.5.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.5.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.5.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.5.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.5.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.5.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.5.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.6.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.6.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.6.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.6.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.6.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.6.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.6.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.7.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.7.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.7.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.7.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.7.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.7.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.7.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.8.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.8.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.8.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.8.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.8.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.8.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.8.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.9.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.9.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.9.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.9.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.9.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.9.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.9.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.10.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.10.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.10.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.10.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.10.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.10.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.10.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.11.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.11.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.11.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.11.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.11.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.11.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.11.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.12.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.12.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.12.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.12.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.12.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.12.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.12.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.13.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.13.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.13.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.13.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.13.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.13.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.13.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.14.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.14.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.14.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.14.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.14.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.14.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.14.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.15.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.15.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.15.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.15.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.15.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.15.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.15.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.16.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.16.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.16.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.16.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.16.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.16.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.16.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.17.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.17.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.17.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.17.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.17.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.17.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.17.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.18.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.18.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.18.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.18.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.18.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.18.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.18.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.19.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.19.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.19.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.19.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.19.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.19.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.19.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.20.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.20.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.20.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.20.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.20.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.20.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.20.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.21.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.21.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.21.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.21.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.21.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.21.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.21.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.22.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.22.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.22.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.22.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.22.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.22.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.22.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.23.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.23.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.23.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.23.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.23.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.23.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.23.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.24.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.24.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.24.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.24.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.24.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.24.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.24.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.25.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.25.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.25.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.25.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.25.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.25.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.25.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.26.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.26.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.26.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.26.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.26.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.26.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.26.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.27.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.27.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.27.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.27.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.27.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.27.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.27.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.28.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.28.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.28.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.28.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.28.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.28.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.28.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.29.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.29.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.29.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.29.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.29.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.29.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.29.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.30.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.30.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.30.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.30.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.30.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.30.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.30.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+  - model.layers.31.self_attn.q_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.31.self_attn.k_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.31.self_attn.v_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.31.self_attn.o_proj: shape=(4096, 4096) weights=16,777,216
+  - model.layers.31.mlp.gate_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.31.mlp.up_proj: shape=(11008, 4096) weights=45,088,768
+  - model.layers.31.mlp.down_proj: shape=(4096, 11008) weights=45,088,768
+Total selected weights: 6,476,005,376
+
+Active windows: 32
+  window 00: layers=7 weights=202,375,168
+  window 01: layers=7 weights=202,375,168
+  window 02: layers=7 weights=202,375,168
+  window 03: layers=7 weights=202,375,168
+  window 04: layers=7 weights=202,375,168
+  window 05: layers=7 weights=202,375,168
+  window 06: layers=7 weights=202,375,168
+  window 07: layers=7 weights=202,375,168
+  window 08: layers=7 weights=202,375,168
+  window 09: layers=7 weights=202,375,168
+  window 10: layers=7 weights=202,375,168
+  window 11: layers=7 weights=202,375,168
+  window 12: layers=7 weights=202,375,168
+  window 13: layers=7 weights=202,375,168
+  window 14: layers=7 weights=202,375,168
+  window 15: layers=7 weights=202,375,168
+  window 16: layers=7 weights=202,375,168
+  window 17: layers=7 weights=202,375,168
+  window 18: layers=7 weights=202,375,168
+  window 19: layers=7 weights=202,375,168
+  window 20: layers=7 weights=202,375,168
+  window 21: layers=7 weights=202,375,168
+  window 22: layers=7 weights=202,375,168
+  window 23: layers=7 weights=202,375,168
+  window 24: layers=7 weights=202,375,168
+  window 25: layers=7 weights=202,375,168
+  window 26: layers=7 weights=202,375,168
+  window 27: layers=7 weights=202,375,168
+  window 28: layers=7 weights=202,375,168
+  window 29: layers=7 weights=202,375,168
+  window 30: layers=7 weights=202,375,168
+  window 31: layers=7 weights=202,375,168
+
+Dynamic ELSA/Fisher sparsity is enabled. Pass 1 starts uniform; profile will be computed after the requested warmup pass.
+
+Collecting per-channel activation norms for Wanda warm-start (batches=128, max_seq_len=2048)...
+    activation calibration: batch 16/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+    activation calibration: batch 32/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+    activation calibration: batch 48/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+    activation calibration: batch 64/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+    activation calibration: batch 80/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+    activation calibration: batch 96/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+    activation calibration: batch 112/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+    activation calibration: batch 128/128  cuda=[alloc=25.11GB reserved=25.42GB max=25.40GB]
+Wanda activation pass done in 56s; got norms for 224/224 layers. CUDA: alloc=25.11GB reserved=25.14GB max=25.40GB
+
+[AWQ v9c] applying channel smoothing alpha=0.5 across 32 blocks...
+  [AWQ] block 8/32 done
+  [AWQ] block 16/32 done
+  [AWQ] block 24/32 done
+  [AWQ] block 32/32 done
+[AWQ] applied to 64 groups, skipped 0; o_proj and down_proj are intentionally NOT AWQ-smoothed (no upstream LayerNorm).
+
+Initializing ADMM states...
+  [1/224] model.layers.0.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [2/224] model.layers.0.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [3/224] model.layers.0.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [4/224] model.layers.0.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [5/224] model.layers.0.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [6/224] model.layers.0.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [7/224] model.layers.0.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [8/224] model.layers.1.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [9/224] model.layers.1.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [10/224] model.layers.1.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [11/224] model.layers.1.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [12/224] model.layers.1.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [13/224] model.layers.1.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [14/224] model.layers.1.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [15/224] model.layers.2.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [16/224] model.layers.2.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [17/224] model.layers.2.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [18/224] model.layers.2.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [19/224] model.layers.2.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [20/224] model.layers.2.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [21/224] model.layers.2.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [22/224] model.layers.3.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [23/224] model.layers.3.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [24/224] model.layers.3.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [25/224] model.layers.3.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [26/224] model.layers.3.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [27/224] model.layers.3.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [28/224] model.layers.3.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [29/224] model.layers.4.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [30/224] model.layers.4.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [31/224] model.layers.4.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [32/224] model.layers.4.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [33/224] model.layers.4.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [34/224] model.layers.4.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [35/224] model.layers.4.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [36/224] model.layers.5.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [37/224] model.layers.5.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [38/224] model.layers.5.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [39/224] model.layers.5.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [40/224] model.layers.5.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [41/224] model.layers.5.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [42/224] model.layers.5.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [43/224] model.layers.6.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [44/224] model.layers.6.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [45/224] model.layers.6.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [46/224] model.layers.6.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [47/224] model.layers.6.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [48/224] model.layers.6.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [49/224] model.layers.6.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [50/224] model.layers.7.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [51/224] model.layers.7.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [52/224] model.layers.7.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [53/224] model.layers.7.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [54/224] model.layers.7.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [55/224] model.layers.7.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [56/224] model.layers.7.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [57/224] model.layers.8.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [58/224] model.layers.8.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [59/224] model.layers.8.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [60/224] model.layers.8.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [61/224] model.layers.8.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [62/224] model.layers.8.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [63/224] model.layers.8.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [64/224] model.layers.9.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [65/224] model.layers.9.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [66/224] model.layers.9.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [67/224] model.layers.9.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [68/224] model.layers.9.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [69/224] model.layers.9.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [70/224] model.layers.9.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [71/224] model.layers.10.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [72/224] model.layers.10.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [73/224] model.layers.10.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [74/224] model.layers.10.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [75/224] model.layers.10.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [76/224] model.layers.10.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [77/224] model.layers.10.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [78/224] model.layers.11.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [79/224] model.layers.11.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [80/224] model.layers.11.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [81/224] model.layers.11.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [82/224] model.layers.11.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [83/224] model.layers.11.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [84/224] model.layers.11.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [85/224] model.layers.12.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [86/224] model.layers.12.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [87/224] model.layers.12.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [88/224] model.layers.12.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [89/224] model.layers.12.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [90/224] model.layers.12.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [91/224] model.layers.12.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [92/224] model.layers.13.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [93/224] model.layers.13.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [94/224] model.layers.13.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [95/224] model.layers.13.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [96/224] model.layers.13.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [97/224] model.layers.13.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [98/224] model.layers.13.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [99/224] model.layers.14.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [100/224] model.layers.14.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [101/224] model.layers.14.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [102/224] model.layers.14.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [103/224] model.layers.14.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [104/224] model.layers.14.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [105/224] model.layers.14.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [106/224] model.layers.15.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [107/224] model.layers.15.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [108/224] model.layers.15.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [109/224] model.layers.15.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [110/224] model.layers.15.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [111/224] model.layers.15.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [112/224] model.layers.15.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [113/224] model.layers.16.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [114/224] model.layers.16.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [115/224] model.layers.16.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [116/224] model.layers.16.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [117/224] model.layers.16.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [118/224] model.layers.16.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [119/224] model.layers.16.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [120/224] model.layers.17.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [121/224] model.layers.17.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [122/224] model.layers.17.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [123/224] model.layers.17.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [124/224] model.layers.17.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [125/224] model.layers.17.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [126/224] model.layers.17.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [127/224] model.layers.18.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [128/224] model.layers.18.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [129/224] model.layers.18.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [130/224] model.layers.18.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [131/224] model.layers.18.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [132/224] model.layers.18.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [133/224] model.layers.18.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [134/224] model.layers.19.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [135/224] model.layers.19.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [136/224] model.layers.19.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [137/224] model.layers.19.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [138/224] model.layers.19.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [139/224] model.layers.19.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [140/224] model.layers.19.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [141/224] model.layers.20.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [142/224] model.layers.20.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [143/224] model.layers.20.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [144/224] model.layers.20.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [145/224] model.layers.20.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [146/224] model.layers.20.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [147/224] model.layers.20.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [148/224] model.layers.21.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [149/224] model.layers.21.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [150/224] model.layers.21.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [151/224] model.layers.21.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [152/224] model.layers.21.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [153/224] model.layers.21.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [154/224] model.layers.21.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [155/224] model.layers.22.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [156/224] model.layers.22.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [157/224] model.layers.22.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [158/224] model.layers.22.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [159/224] model.layers.22.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [160/224] model.layers.22.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [161/224] model.layers.22.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [162/224] model.layers.23.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [163/224] model.layers.23.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [164/224] model.layers.23.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [165/224] model.layers.23.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [166/224] model.layers.23.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [167/224] model.layers.23.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [168/224] model.layers.23.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [169/224] model.layers.24.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [170/224] model.layers.24.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [171/224] model.layers.24.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [172/224] model.layers.24.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [173/224] model.layers.24.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [174/224] model.layers.24.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [175/224] model.layers.24.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [176/224] model.layers.25.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [177/224] model.layers.25.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [178/224] model.layers.25.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [179/224] model.layers.25.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [180/224] model.layers.25.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [181/224] model.layers.25.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [182/224] model.layers.25.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [183/224] model.layers.26.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [184/224] model.layers.26.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [185/224] model.layers.26.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [186/224] model.layers.26.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [187/224] model.layers.26.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [188/224] model.layers.26.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [189/224] model.layers.26.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [190/224] model.layers.27.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [191/224] model.layers.27.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [192/224] model.layers.27.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [193/224] model.layers.27.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [194/224] model.layers.27.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [195/224] model.layers.27.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [196/224] model.layers.27.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [197/224] model.layers.28.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [198/224] model.layers.28.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [199/224] model.layers.28.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [200/224] model.layers.28.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [201/224] model.layers.28.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [202/224] model.layers.28.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [203/224] model.layers.28.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [204/224] model.layers.29.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [205/224] model.layers.29.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [206/224] model.layers.29.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [207/224] model.layers.29.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [208/224] model.layers.29.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [209/224] model.layers.29.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [210/224] model.layers.29.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [211/224] model.layers.30.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [212/224] model.layers.30.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [213/224] model.layers.30.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [214/224] model.layers.30.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [215/224] model.layers.30.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [216/224] model.layers.30.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [217/224] model.layers.30.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [218/224] model.layers.31.self_attn.q_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [219/224] model.layers.31.self_attn.k_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [220/224] model.layers.31.self_attn.v_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [221/224] model.layers.31.self_attn.o_proj: shape=(4096, 4096) kept=3,355,443/16,777,216 sparsity=80.00% init=wanda
+  [222/224] model.layers.31.mlp.gate_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [223/224] model.layers.31.mlp.up_proj: shape=(11008, 4096) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+  [224/224] model.layers.31.mlp.down_proj: shape=(4096, 11008) kept=9,017,754/45,088,768 sparsity=80.00% init=wanda
+ADMM state initialization finished in 6m12s.
+
+[OWL v9b] computing global top-0.500% outlier mask (source=current) across 224 layers...
+  [OWL] sampled 32/224 layers
+  [OWL] sampled 64/224 layers
+  [OWL] sampled 96/224 layers
+  [OWL] sampled 128/224 layers
+  [OWL] sampled 160/224 layers
+  [OWL] sampled 192/224 layers
+  [OWL] sampled 224/224 layers
+  [OWL] threshold=6.091309e-02  (sampled n~=2,000,000  q=0.995000)
+  [OWL] built mask for 32/224 layers
+  [OWL] built mask for 64/224 layers
+  [OWL] built mask for 96/224 layers
+  [OWL] built mask for 128/224 layers
+  [OWL] built mask for 160/224 layers
+  [OWL] built mask for 192/224 layers
+  [OWL] built mask for 224/224 layers
+[OWL] threshold=6.091309e-02  forced_keep=32,842,657/6,476,005,376 (0.5071%, requested 0.5000%)  elapsed=48s
+
+Applying initial sparse-forward z weights to the full selected model before training...
+
+Applying final sparse z weights to model...
+  [1/224] model.layers.0.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [2/224] model.layers.0.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [3/224] model.layers.0.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [4/224] model.layers.0.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [5/224] model.layers.0.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [6/224] model.layers.0.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [7/224] model.layers.0.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [8/224] model.layers.1.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [9/224] model.layers.1.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [10/224] model.layers.1.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [11/224] model.layers.1.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [12/224] model.layers.1.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [13/224] model.layers.1.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [14/224] model.layers.1.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [15/224] model.layers.2.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [16/224] model.layers.2.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [17/224] model.layers.2.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [18/224] model.layers.2.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [19/224] model.layers.2.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [20/224] model.layers.2.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [21/224] model.layers.2.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [22/224] model.layers.3.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [23/224] model.layers.3.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [24/224] model.layers.3.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [25/224] model.layers.3.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [26/224] model.layers.3.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [27/224] model.layers.3.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [28/224] model.layers.3.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [29/224] model.layers.4.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [30/224] model.layers.4.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [31/224] model.layers.4.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [32/224] model.layers.4.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [33/224] model.layers.4.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [34/224] model.layers.4.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [35/224] model.layers.4.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [36/224] model.layers.5.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [37/224] model.layers.5.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [38/224] model.layers.5.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [39/224] model.layers.5.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [40/224] model.layers.5.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [41/224] model.layers.5.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [42/224] model.layers.5.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [43/224] model.layers.6.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [44/224] model.layers.6.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [45/224] model.layers.6.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [46/224] model.layers.6.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [47/224] model.layers.6.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [48/224] model.layers.6.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [49/224] model.layers.6.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [50/224] model.layers.7.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [51/224] model.layers.7.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [52/224] model.layers.7.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [53/224] model.layers.7.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [54/224] model.layers.7.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [55/224] model.layers.7.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [56/224] model.layers.7.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [57/224] model.layers.8.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [58/224] model.layers.8.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [59/224] model.layers.8.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [60/224] model.layers.8.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [61/224] model.layers.8.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [62/224] model.layers.8.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [63/224] model.layers.8.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [64/224] model.layers.9.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [65/224] model.layers.9.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [66/224] model.layers.9.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [67/224] model.layers.9.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [68/224] model.layers.9.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [69/224] model.layers.9.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [70/224] model.layers.9.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [71/224] model.layers.10.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [72/224] model.layers.10.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [73/224] model.layers.10.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [74/224] model.layers.10.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [75/224] model.layers.10.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [76/224] model.layers.10.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [77/224] model.layers.10.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [78/224] model.layers.11.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [79/224] model.layers.11.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [80/224] model.layers.11.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [81/224] model.layers.11.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [82/224] model.layers.11.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [83/224] model.layers.11.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [84/224] model.layers.11.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [85/224] model.layers.12.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [86/224] model.layers.12.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [87/224] model.layers.12.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [88/224] model.layers.12.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [89/224] model.layers.12.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [90/224] model.layers.12.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [91/224] model.layers.12.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [92/224] model.layers.13.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [93/224] model.layers.13.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [94/224] model.layers.13.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [95/224] model.layers.13.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [96/224] model.layers.13.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [97/224] model.layers.13.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [98/224] model.layers.13.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [99/224] model.layers.14.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [100/224] model.layers.14.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [101/224] model.layers.14.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [102/224] model.layers.14.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [103/224] model.layers.14.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [104/224] model.layers.14.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [105/224] model.layers.14.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [106/224] model.layers.15.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [107/224] model.layers.15.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [108/224] model.layers.15.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [109/224] model.layers.15.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [110/224] model.layers.15.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [111/224] model.layers.15.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [112/224] model.layers.15.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [113/224] model.layers.16.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [114/224] model.layers.16.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [115/224] model.layers.16.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [116/224] model.layers.16.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [117/224] model.layers.16.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [118/224] model.layers.16.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [119/224] model.layers.16.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [120/224] model.layers.17.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [121/224] model.layers.17.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [122/224] model.layers.17.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [123/224] model.layers.17.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [124/224] model.layers.17.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [125/224] model.layers.17.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [126/224] model.layers.17.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [127/224] model.layers.18.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [128/224] model.layers.18.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [129/224] model.layers.18.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [130/224] model.layers.18.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [131/224] model.layers.18.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [132/224] model.layers.18.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [133/224] model.layers.18.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [134/224] model.layers.19.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [135/224] model.layers.19.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [136/224] model.layers.19.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [137/224] model.layers.19.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [138/224] model.layers.19.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [139/224] model.layers.19.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [140/224] model.layers.19.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [141/224] model.layers.20.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [142/224] model.layers.20.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [143/224] model.layers.20.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [144/224] model.layers.20.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [145/224] model.layers.20.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [146/224] model.layers.20.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [147/224] model.layers.20.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [148/224] model.layers.21.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [149/224] model.layers.21.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [150/224] model.layers.21.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [151/224] model.layers.21.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [152/224] model.layers.21.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [153/224] model.layers.21.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [154/224] model.layers.21.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [155/224] model.layers.22.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [156/224] model.layers.22.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [157/224] model.layers.22.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [158/224] model.layers.22.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [159/224] model.layers.22.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [160/224] model.layers.22.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [161/224] model.layers.22.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [162/224] model.layers.23.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [163/224] model.layers.23.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [164/224] model.layers.23.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [165/224] model.layers.23.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [166/224] model.layers.23.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [167/224] model.layers.23.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [168/224] model.layers.23.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [169/224] model.layers.24.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [170/224] model.layers.24.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [171/224] model.layers.24.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [172/224] model.layers.24.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [173/224] model.layers.24.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [174/224] model.layers.24.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [175/224] model.layers.24.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [176/224] model.layers.25.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [177/224] model.layers.25.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [178/224] model.layers.25.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [179/224] model.layers.25.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [180/224] model.layers.25.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [181/224] model.layers.25.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [182/224] model.layers.25.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [183/224] model.layers.26.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [184/224] model.layers.26.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [185/224] model.layers.26.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [186/224] model.layers.26.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [187/224] model.layers.26.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [188/224] model.layers.26.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [189/224] model.layers.26.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [190/224] model.layers.27.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [191/224] model.layers.27.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [192/224] model.layers.27.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [193/224] model.layers.27.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [194/224] model.layers.27.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [195/224] model.layers.27.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [196/224] model.layers.27.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [197/224] model.layers.28.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [198/224] model.layers.28.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [199/224] model.layers.28.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [200/224] model.layers.28.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [201/224] model.layers.28.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [202/224] model.layers.28.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [203/224] model.layers.28.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [204/224] model.layers.29.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [205/224] model.layers.29.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [206/224] model.layers.29.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [207/224] model.layers.29.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [208/224] model.layers.29.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [209/224] model.layers.29.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [210/224] model.layers.29.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [211/224] model.layers.30.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [212/224] model.layers.30.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [213/224] model.layers.30.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [214/224] model.layers.30.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [215/224] model.layers.30.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [216/224] model.layers.30.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [217/224] model.layers.30.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [218/224] model.layers.31.self_attn.q_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [219/224] model.layers.31.self_attn.k_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [220/224] model.layers.31.self_attn.v_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [221/224] model.layers.31.self_attn.o_proj: nonzero=3,355,443/16,777,216 sparsity=80.00%
+  [222/224] model.layers.31.mlp.gate_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [223/224] model.layers.31.mlp.up_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+  [224/224] model.layers.31.mlp.down_proj: nonzero=9,017,754/45,088,768 sparsity=80.00%
+Final selected-layer sparsity: 80.00% (5,180,804,288/6,476,005,376 zero)
+Initial sparse calibration probe: loss=9.725978 ppl~16747.058 tokens=16376
+
+Training plan:
+  passes            : 3
+  steps/window      : 128
+  total planned     : 12288
+  projection interval: 16
+  base LR           : 7e-05
+  final lambda      : 5e-05
+  lambda schedule   : constant
+  penalty norm      : sum
+  hard sparse fwd   : True
+  dynamic sparsity  : fisher_damage
+  fisher power      : 0.75
+  fisher-mag blend  : 0.05
+  fisher max factor : 100.0
+  crop mode         : random
+  grad accum steps  : 4
+  FP32 master x     : True
+  CUDA memory       : alloc=25.11GB reserved=25.79GB max=25.72GB
+
+====================================================================================================
+ADMM PASS 1/3  target_sparsity=80.00%
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+WINDOW 1/32 | active layers=7
+  active: model.layers.0.self_attn.q_proj
+  active: model.layers.0.self_attn.k_proj
+  active: model.layers.0.self_attn.v_proj
+  active: model.layers.0.self_attn.o_proj
+  active: model.layers.0.mlp.gate_proj
+  active: model.layers.0.mlp.up_proj
+  active: model.layers.0.mlp.down_proj
+CUDA before window: alloc=25.11GB reserved=25.79GB max=25.72GB
+  restored x states: x=0 z_fallback=7 missing=0
+CUDA after optimizer/state load: alloc=28.13GB reserved=28.19GB max=28.42GB
+step=000000 pass=1/3 win=1/32 local=1/128 lm=9.58219 ppl~14504.10 kd=12.0287 pen=0.00000e+00 lambda=5.000e-05 lr=7.000e-05 gnorm=5.000e-01 admm_rms=0.000e+00 upd_rms=2.388e-01 time=4.07s cuda=[alloc=28.13GB reserved=44.60GB max=38.87GB]
+step=000001 pass=1/3 win=1/32 local=2/128 lm=9.93716 ppl~20684.93 kd=14.6835 pen=1.41417e-06 lambda=5.000e-05 lr=6.999e-05 gnorm=5.000e-01 admm_rms=1.672e-05 upd_rms=2.365e-01 time=4.03s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000002 pass=1/3 win=1/32 local=3/128 lm=9.38038 ppl~11853.49 kd=15.0843 pen=4.25045e-06 lambda=5.000e-05 lr=6.999e-05 gnorm=5.000e-01 admm_rms=2.898e-05 upd_rms=2.304e-01 time=4.06s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000003 pass=1/3 win=1/32 local=4/128 lm=9.61392 ppl~14971.78 kd=13.6378 pen=8.89812e-06 lambda=5.000e-05 lr=6.998e-05 gnorm=5.000e-01 admm_rms=4.194e-05 upd_rms=2.269e-01 time=4.07s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000004 pass=1/3 win=1/32 local=5/128 lm=8.86512 ppl~7080.61 kd=10.7738 pen=1.44677e-05 lambda=5.000e-05 lr=6.998e-05 gnorm=5.000e-01 admm_rms=5.348e-05 upd_rms=2.235e-01 time=4.11s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000005 pass=1/3 win=1/32 local=6/128 lm=8.88548 ppl~7226.29 kd=11.5439 pen=2.13492e-05 lambda=5.000e-05 lr=6.997e-05 gnorm=5.000e-01 admm_rms=6.496e-05 upd_rms=2.212e-01 time=4.12s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000006 pass=1/3 win=1/32 local=7/128 lm=8.50351 ppl~4932.04 kd=12.2860 pen=2.94936e-05 lambda=5.000e-05 lr=6.997e-05 gnorm=5.000e-01 admm_rms=7.635e-05 upd_rms=2.196e-01 time=4.16s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000007 pass=1/3 win=1/32 local=8/128 lm=8.47717 ppl~4803.85 kd=12.4970 pen=3.89563e-05 lambda=5.000e-05 lr=6.996e-05 gnorm=5.000e-01 admm_rms=8.775e-05 upd_rms=2.173e-01 time=4.16s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000008 pass=1/3 win=1/32 local=9/128 lm=8.80133 ppl~6643.07 kd=10.7161 pen=4.99328e-05 lambda=5.000e-05 lr=6.996e-05 gnorm=5.000e-01 admm_rms=9.934e-05 upd_rms=2.160e-01 time=4.15s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000009 pass=1/3 win=1/32 local=10/128 lm=8.52089 ppl~5018.51 kd=11.4633 pen=6.15574e-05 lambda=5.000e-05 lr=6.995e-05 gnorm=5.000e-01 admm_rms=1.103e-04 upd_rms=2.139e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000010 pass=1/3 win=1/32 local=11/128 lm=8.62569 ppl~5573.03 kd=11.1049 pen=7.45965e-05 lambda=5.000e-05 lr=6.995e-05 gnorm=5.000e-01 admm_rms=1.214e-04 upd_rms=2.136e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000011 pass=1/3 win=1/32 local=12/128 lm=8.59267 ppl~5392.01 kd=11.5888 pen=8.82482e-05 lambda=5.000e-05 lr=6.994e-05 gnorm=5.000e-01 admm_rms=1.321e-04 upd_rms=2.111e-01 time=4.21s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000012 pass=1/3 win=1/32 local=13/128 lm=8.53185 ppl~5073.83 kd=11.1817 pen=1.02784e-04 lambda=5.000e-05 lr=6.994e-05 gnorm=5.000e-01 admm_rms=1.425e-04 upd_rms=2.081e-01 time=4.21s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000013 pass=1/3 win=1/32 local=14/128 lm=8.52827 ppl~5055.67 kd=11.3289 pen=1.18132e-04 lambda=5.000e-05 lr=6.993e-05 gnorm=5.000e-01 admm_rms=1.528e-04 upd_rms=2.055e-01 time=4.22s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000014 pass=1/3 win=1/32 local=15/128 lm=8.44500 ppl~4651.75 kd=10.9645 pen=1.33778e-04 lambda=5.000e-05 lr=6.993e-05 gnorm=5.000e-01 admm_rms=1.626e-04 upd_rms=2.036e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+step=000015 pass=1/3 win=1/32 local=16/128 lm=8.41251 ppl~4503.05 kd=10.8126 pen=1.50057e-04 lambda=5.000e-05 lr=6.992e-05 gnorm=5.000e-01 admm_rms=1.722e-04 upd_rms=2.030e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.74GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.7985e-04 proj=magnitude
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.7985e-04 proj=magnitude
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.7985e-04 proj=magnitude
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.7985e-04 proj=magnitude
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=2.7985e-04 proj=magnitude
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=2.7985e-04 proj=magnitude
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=2.7985e-04 proj=magnitude
+  projection done: sparsity=80.00% elapsed=15s
+step=000016 pass=1/3 win=1/32 local=17/128 lm=8.27183 ppl~3912.12 kd=10.6872 pen=1.32451e-04 lambda=5.000e-05 lr=6.992e-05 gnorm=5.000e-01 admm_rms=1.618e-04 upd_rms=2.025e-01 time=4.13s cuda=[alloc=28.13GB reserved=44.95GB max=38.87GB]
+step=000017 pass=1/3 win=1/32 local=18/128 lm=8.32393 ppl~4121.34 kd=10.1139 pen=1.46247e-04 lambda=5.000e-05 lr=6.991e-05 gnorm=5.000e-01 admm_rms=1.700e-04 upd_rms=2.015e-01 time=4.18s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000018 pass=1/3 win=1/32 local=19/128 lm=8.46950 ppl~4767.12 kd=11.3977 pen=1.62102e-04 lambda=5.000e-05 lr=6.991e-05 gnorm=5.000e-01 admm_rms=1.790e-04 upd_rms=2.023e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000019 pass=1/3 win=1/32 local=20/128 lm=8.21647 ppl~3701.43 kd=9.3301 pen=1.78209e-04 lambda=5.000e-05 lr=6.990e-05 gnorm=5.000e-01 admm_rms=1.877e-04 upd_rms=2.024e-01 time=4.21s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000020 pass=1/3 win=1/32 local=21/128 lm=8.13469 ppl~3410.75 kd=9.9441 pen=1.95574e-04 lambda=5.000e-05 lr=6.990e-05 gnorm=5.000e-01 admm_rms=1.966e-04 upd_rms=2.027e-01 time=4.22s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000021 pass=1/3 win=1/32 local=22/128 lm=8.02342 ppl~3051.59 kd=10.5110 pen=2.13698e-04 lambda=5.000e-05 lr=6.989e-05 gnorm=5.000e-01 admm_rms=2.055e-04 upd_rms=2.030e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000022 pass=1/3 win=1/32 local=23/128 lm=8.10780 ppl~3320.26 kd=9.4089 pen=2.33078e-04 lambda=5.000e-05 lr=6.989e-05 gnorm=5.000e-01 admm_rms=2.146e-04 upd_rms=2.031e-01 time=4.25s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000023 pass=1/3 win=1/32 local=24/128 lm=8.23746 ppl~3779.95 kd=10.1824 pen=2.53401e-04 lambda=5.000e-05 lr=6.988e-05 gnorm=5.000e-01 admm_rms=2.238e-04 upd_rms=2.039e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000024 pass=1/3 win=1/32 local=25/128 lm=8.14202 ppl~3435.84 kd=10.3192 pen=2.74456e-04 lambda=5.000e-05 lr=6.988e-05 gnorm=5.000e-01 admm_rms=2.329e-04 upd_rms=2.014e-01 time=4.25s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000025 pass=1/3 win=1/32 local=26/128 lm=7.96568 ppl~2880.38 kd=9.6329 pen=2.96291e-04 lambda=5.000e-05 lr=6.987e-05 gnorm=5.000e-01 admm_rms=2.420e-04 upd_rms=2.016e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000026 pass=1/3 win=1/32 local=27/128 lm=8.14486 ppl~3445.62 kd=11.1361 pen=3.18255e-04 lambda=5.000e-05 lr=6.987e-05 gnorm=5.000e-01 admm_rms=2.508e-04 upd_rms=2.012e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000027 pass=1/3 win=1/32 local=28/128 lm=8.00476 ppl~2995.19 kd=11.4385 pen=3.40076e-04 lambda=5.000e-05 lr=6.986e-05 gnorm=5.000e-01 admm_rms=2.593e-04 upd_rms=2.025e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000028 pass=1/3 win=1/32 local=29/128 lm=7.80585 ppl~2454.92 kd=12.5143 pen=3.61598e-04 lambda=5.000e-05 lr=6.986e-05 gnorm=5.000e-01 admm_rms=2.673e-04 upd_rms=2.011e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000029 pass=1/3 win=1/32 local=30/128 lm=7.87435 ppl~2628.97 kd=10.7610 pen=3.84398e-04 lambda=5.000e-05 lr=6.985e-05 gnorm=5.000e-01 admm_rms=2.756e-04 upd_rms=1.977e-01 time=4.30s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000030 pass=1/3 win=1/32 local=31/128 lm=7.77370 ppl~2377.25 kd=11.0563 pen=4.08623e-04 lambda=5.000e-05 lr=6.985e-05 gnorm=5.000e-01 admm_rms=2.842e-04 upd_rms=1.960e-01 time=4.30s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000031 pass=1/3 win=1/32 local=32/128 lm=7.71620 ppl~2244.41 kd=10.2086 pen=4.33740e-04 lambda=5.000e-05 lr=6.984e-05 gnorm=5.000e-01 admm_rms=2.928e-04 upd_rms=1.938e-01 time=4.31s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=1.5948e-03 proj=fisher
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.0378e-03 proj=fisher
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.0198e-03 proj=fisher
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.6590e-03 proj=fisher
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=5.5942e-04 proj=fisher
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=5.2172e-03 proj=fisher
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=5.4601e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.031% elapsed=18s
+step=000032 pass=1/3 win=1/32 local=33/128 lm=8.05187 ppl~3139.66 kd=12.5593 pen=4.26936e-04 lambda=5.000e-05 lr=6.984e-05 gnorm=5.000e-01 admm_rms=2.905e-04 upd_rms=1.938e-01 time=4.14s cuda=[alloc=28.13GB reserved=44.95GB max=38.87GB]
+step=000033 pass=1/3 win=1/32 local=34/128 lm=7.83441 ppl~2526.04 kd=9.8979 pen=4.50763e-04 lambda=5.000e-05 lr=6.983e-05 gnorm=5.000e-01 admm_rms=2.985e-04 upd_rms=1.954e-01 time=4.18s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000034 pass=1/3 win=1/32 local=35/128 lm=7.80291 ppl~2447.70 kd=11.5623 pen=4.75694e-04 lambda=5.000e-05 lr=6.983e-05 gnorm=5.000e-01 admm_rms=3.066e-04 upd_rms=1.954e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000035 pass=1/3 win=1/32 local=36/128 lm=7.78701 ppl~2409.11 kd=9.5163 pen=5.01961e-04 lambda=5.000e-05 lr=6.982e-05 gnorm=5.000e-01 admm_rms=3.150e-04 upd_rms=1.962e-01 time=4.21s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000036 pass=1/3 win=1/32 local=37/128 lm=7.74597 ppl~2312.24 kd=13.1708 pen=5.29016e-04 lambda=5.000e-05 lr=6.982e-05 gnorm=5.000e-01 admm_rms=3.234e-04 upd_rms=1.988e-01 time=4.22s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000037 pass=1/3 win=1/32 local=38/128 lm=7.82285 ppl~2497.01 kd=9.7970 pen=5.56141e-04 lambda=5.000e-05 lr=6.981e-05 gnorm=5.000e-01 admm_rms=3.315e-04 upd_rms=1.989e-01 time=4.23s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000038 pass=1/3 win=1/32 local=39/128 lm=7.96567 ppl~2880.37 kd=10.5564 pen=5.84508e-04 lambda=5.000e-05 lr=6.981e-05 gnorm=5.000e-01 admm_rms=3.399e-04 upd_rms=1.982e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000039 pass=1/3 win=1/32 local=40/128 lm=7.76188 ppl~2349.33 kd=11.2764 pen=6.13491e-04 lambda=5.000e-05 lr=6.980e-05 gnorm=5.000e-01 admm_rms=3.482e-04 upd_rms=1.991e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000040 pass=1/3 win=1/32 local=41/128 lm=7.70006 ppl~2208.49 kd=11.4285 pen=6.42773e-04 lambda=5.000e-05 lr=6.979e-05 gnorm=5.000e-01 admm_rms=3.564e-04 upd_rms=2.018e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000041 pass=1/3 win=1/32 local=42/128 lm=7.77644 ppl~2383.77 kd=11.5225 pen=6.71421e-04 lambda=5.000e-05 lr=6.979e-05 gnorm=5.000e-01 admm_rms=3.643e-04 upd_rms=1.995e-01 time=4.32s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000042 pass=1/3 win=1/32 local=43/128 lm=7.74454 ppl~2308.94 kd=10.9787 pen=7.00688e-04 lambda=5.000e-05 lr=6.978e-05 gnorm=5.000e-01 admm_rms=3.721e-04 upd_rms=1.982e-01 time=4.29s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000043 pass=1/3 win=1/32 local=44/128 lm=7.94587 ppl~2823.88 kd=8.5795 pen=7.29953e-04 lambda=5.000e-05 lr=6.978e-05 gnorm=5.000e-01 admm_rms=3.798e-04 upd_rms=1.982e-01 time=5.34s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000044 pass=1/3 win=1/32 local=45/128 lm=7.75319 ppl~2328.98 kd=8.4036 pen=7.58955e-04 lambda=5.000e-05 lr=6.977e-05 gnorm=5.000e-01 admm_rms=3.873e-04 upd_rms=2.006e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000045 pass=1/3 win=1/32 local=46/128 lm=7.52331 ppl~1850.69 kd=12.5335 pen=7.86992e-04 lambda=5.000e-05 lr=6.977e-05 gnorm=5.000e-01 admm_rms=3.944e-04 upd_rms=2.010e-01 time=4.29s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000046 pass=1/3 win=1/32 local=47/128 lm=7.63079 ppl~2060.67 kd=9.4714 pen=8.14558e-04 lambda=5.000e-05 lr=6.976e-05 gnorm=5.000e-01 admm_rms=4.012e-04 upd_rms=1.976e-01 time=4.30s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000047 pass=1/3 win=1/32 local=48/128 lm=7.87220 ppl~2623.34 kd=11.9044 pen=8.43776e-04 lambda=5.000e-05 lr=6.976e-05 gnorm=5.000e-01 admm_rms=4.084e-04 upd_rms=1.954e-01 time=4.29s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.0612e-03 proj=fisher
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.6683e-03 proj=fisher
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.4564e-03 proj=fisher
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.9295e-03 proj=fisher
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=4.7684e-03 proj=fisher
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=8.4992e-03 proj=fisher
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=6.5223e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.031% elapsed=19s
+step=000048 pass=1/3 win=1/32 local=49/128 lm=7.84297 ppl~2547.76 kd=10.6235 pen=8.45197e-04 lambda=5.000e-05 lr=6.975e-05 gnorm=5.000e-01 admm_rms=4.087e-04 upd_rms=1.963e-01 time=4.13s cuda=[alloc=28.13GB reserved=44.95GB max=38.87GB]
+step=000049 pass=1/3 win=1/32 local=50/128 lm=7.71649 ppl~2245.07 kd=12.4514 pen=8.73206e-04 lambda=5.000e-05 lr=6.975e-05 gnorm=5.000e-01 admm_rms=4.154e-04 upd_rms=1.960e-01 time=4.15s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000050 pass=1/3 win=1/32 local=51/128 lm=7.60291 ppl~2004.01 kd=9.7036 pen=9.03330e-04 lambda=5.000e-05 lr=6.974e-05 gnorm=5.000e-01 admm_rms=4.225e-04 upd_rms=1.946e-01 time=4.20s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000051 pass=1/3 win=1/32 local=52/128 lm=7.59863 ppl~1995.47 kd=9.6111 pen=9.33246e-04 lambda=5.000e-05 lr=6.974e-05 gnorm=5.000e-01 admm_rms=4.295e-04 upd_rms=1.929e-01 time=4.20s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000052 pass=1/3 win=1/32 local=53/128 lm=7.57011 ppl~1939.35 kd=9.7915 pen=9.64099e-04 lambda=5.000e-05 lr=6.973e-05 gnorm=5.000e-01 admm_rms=4.365e-04 upd_rms=1.927e-01 time=4.22s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000053 pass=1/3 win=1/32 local=54/128 lm=7.51750 ppl~1839.97 kd=9.6142 pen=9.95775e-04 lambda=5.000e-05 lr=6.973e-05 gnorm=5.000e-01 admm_rms=4.436e-04 upd_rms=1.921e-01 time=4.23s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000054 pass=1/3 win=1/32 local=55/128 lm=7.50287 ppl~1813.25 kd=9.8695 pen=1.02829e-03 lambda=5.000e-05 lr=6.972e-05 gnorm=5.000e-01 admm_rms=4.508e-04 upd_rms=1.925e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000055 pass=1/3 win=1/32 local=56/128 lm=7.39954 ppl~1635.24 kd=10.1044 pen=1.06056e-03 lambda=5.000e-05 lr=6.972e-05 gnorm=5.000e-01 admm_rms=4.578e-04 upd_rms=1.918e-01 time=4.22s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000056 pass=1/3 win=1/32 local=57/128 lm=7.40721 ppl~1647.82 kd=10.1534 pen=1.09340e-03 lambda=5.000e-05 lr=6.971e-05 gnorm=5.000e-01 admm_rms=4.649e-04 upd_rms=1.931e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000057 pass=1/3 win=1/32 local=58/128 lm=7.84287 ppl~2547.50 kd=11.8462 pen=1.12650e-03 lambda=5.000e-05 lr=6.971e-05 gnorm=5.000e-01 admm_rms=4.719e-04 upd_rms=1.921e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000058 pass=1/3 win=1/32 local=59/128 lm=7.35092 ppl~1557.63 kd=8.5856 pen=1.15960e-03 lambda=5.000e-05 lr=6.970e-05 gnorm=5.000e-01 admm_rms=4.787e-04 upd_rms=1.917e-01 time=4.25s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000059 pass=1/3 win=1/32 local=60/128 lm=7.26911 ppl~1435.27 kd=9.7375 pen=1.19209e-03 lambda=5.000e-05 lr=6.970e-05 gnorm=5.000e-01 admm_rms=4.854e-04 upd_rms=1.883e-01 time=4.44s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000060 pass=1/3 win=1/32 local=61/128 lm=7.17114 ppl~1301.33 kd=9.2026 pen=1.22469e-03 lambda=5.000e-05 lr=6.969e-05 gnorm=5.000e-01 admm_rms=4.920e-04 upd_rms=1.903e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000061 pass=1/3 win=1/32 local=62/128 lm=7.35564 ppl~1565.00 kd=9.6158 pen=1.25494e-03 lambda=5.000e-05 lr=6.969e-05 gnorm=5.000e-01 admm_rms=4.980e-04 upd_rms=1.909e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000062 pass=1/3 win=1/32 local=63/128 lm=7.45308 ppl~1725.16 kd=8.6368 pen=1.28333e-03 lambda=5.000e-05 lr=6.968e-05 gnorm=5.000e-01 admm_rms=5.036e-04 upd_rms=1.916e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000063 pass=1/3 win=1/32 local=64/128 lm=7.69478 ppl~2196.84 kd=9.5616 pen=1.31120e-03 lambda=5.000e-05 lr=6.968e-05 gnorm=5.000e-01 admm_rms=5.091e-04 upd_rms=1.861e-01 time=4.29s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.5233e-03 proj=fisher
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.1820e-03 proj=fisher
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.6937e-03 proj=fisher
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.5340e-03 proj=fisher
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.0042e-02 proj=fisher
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.1058e-02 proj=fisher
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.3165e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.039% elapsed=20s
+step=000064 pass=1/3 win=1/32 local=65/128 lm=7.35971 ppl~1571.37 kd=9.8632 pen=1.32179e-03 lambda=5.000e-05 lr=6.967e-05 gnorm=5.000e-01 admm_rms=5.111e-04 upd_rms=1.870e-01 time=4.13s cuda=[alloc=28.13GB reserved=45.01GB max=38.87GB]
+step=000065 pass=1/3 win=1/32 local=66/128 lm=7.48613 ppl~1783.14 kd=9.3870 pen=1.35080e-03 lambda=5.000e-05 lr=6.967e-05 gnorm=5.000e-01 admm_rms=5.167e-04 upd_rms=1.848e-01 time=4.17s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000066 pass=1/3 win=1/32 local=67/128 lm=7.83447 ppl~2526.20 kd=9.2550 pen=1.38088e-03 lambda=5.000e-05 lr=6.966e-05 gnorm=5.000e-01 admm_rms=5.224e-04 upd_rms=1.855e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000067 pass=1/3 win=1/32 local=68/128 lm=7.46976 ppl~1754.18 kd=12.0108 pen=1.41263e-03 lambda=5.000e-05 lr=6.966e-05 gnorm=5.000e-01 admm_rms=5.284e-04 upd_rms=1.825e-01 time=4.21s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000068 pass=1/3 win=1/32 local=69/128 lm=7.37126 ppl~1589.63 kd=10.0269 pen=1.44384e-03 lambda=5.000e-05 lr=6.965e-05 gnorm=5.000e-01 admm_rms=5.342e-04 upd_rms=1.843e-01 time=4.21s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000069 pass=1/3 win=1/32 local=70/128 lm=7.27414 ppl~1442.52 kd=9.4659 pen=1.47607e-03 lambda=5.000e-05 lr=6.965e-05 gnorm=5.000e-01 admm_rms=5.401e-04 upd_rms=1.837e-01 time=4.21s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000070 pass=1/3 win=1/32 local=71/128 lm=7.17533 ppl~1306.79 kd=7.8390 pen=1.50757e-03 lambda=5.000e-05 lr=6.964e-05 gnorm=5.000e-01 admm_rms=5.459e-04 upd_rms=1.876e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000071 pass=1/3 win=1/32 local=72/128 lm=7.18200 ppl~1315.53 kd=8.9322 pen=1.53757e-03 lambda=5.000e-05 lr=6.964e-05 gnorm=5.000e-01 admm_rms=5.513e-04 upd_rms=1.903e-01 time=4.22s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000072 pass=1/3 win=1/32 local=73/128 lm=7.38264 ppl~1607.83 kd=8.6115 pen=1.56776e-03 lambda=5.000e-05 lr=6.963e-05 gnorm=5.000e-01 admm_rms=5.567e-04 upd_rms=1.852e-01 time=4.25s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000073 pass=1/3 win=1/32 local=74/128 lm=7.51184 ppl~1829.58 kd=10.3102 pen=1.59970e-03 lambda=5.000e-05 lr=6.963e-05 gnorm=5.000e-01 admm_rms=5.623e-04 upd_rms=1.842e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000074 pass=1/3 win=1/32 local=75/128 lm=7.22191 ppl~1369.10 kd=10.2014 pen=1.63156e-03 lambda=5.000e-05 lr=6.962e-05 gnorm=5.000e-01 admm_rms=5.679e-04 upd_rms=1.871e-01 time=4.39s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000075 pass=1/3 win=1/32 local=76/128 lm=7.33022 ppl~1525.72 kd=8.3853 pen=1.66218e-03 lambda=5.000e-05 lr=6.962e-05 gnorm=5.000e-01 admm_rms=5.732e-04 upd_rms=1.838e-01 time=4.29s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000076 pass=1/3 win=1/32 local=77/128 lm=7.18839 ppl~1323.97 kd=9.6010 pen=1.69292e-03 lambda=5.000e-05 lr=6.961e-05 gnorm=5.000e-01 admm_rms=5.785e-04 upd_rms=1.832e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000077 pass=1/3 win=1/32 local=78/128 lm=7.25236 ppl~1411.43 kd=10.2549 pen=1.72226e-03 lambda=5.000e-05 lr=6.961e-05 gnorm=5.000e-01 admm_rms=5.834e-04 upd_rms=1.858e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000078 pass=1/3 win=1/32 local=79/128 lm=7.16555 ppl~1294.08 kd=10.0388 pen=1.74952e-03 lambda=5.000e-05 lr=6.960e-05 gnorm=5.000e-01 admm_rms=5.880e-04 upd_rms=1.851e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000079 pass=1/3 win=1/32 local=80/128 lm=6.98192 ppl~1076.98 kd=13.1555 pen=1.77636e-03 lambda=5.000e-05 lr=6.959e-05 gnorm=5.000e-01 admm_rms=5.925e-04 upd_rms=1.852e-01 time=4.31s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.0288e-03 proj=fisher
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.6566e-03 proj=fisher
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.8856e-03 proj=fisher
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.6342e-03 proj=fisher
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.1367e-02 proj=fisher
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.2476e-02 proj=fisher
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=8.0293e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.043% elapsed=20s
+step=000080 pass=1/3 win=1/32 local=81/128 lm=7.38061 ppl~1604.57 kd=8.8800 pen=1.79000e-03 lambda=5.000e-05 lr=6.959e-05 gnorm=5.000e-01 admm_rms=5.948e-04 upd_rms=1.829e-01 time=4.10s cuda=[alloc=28.13GB reserved=44.95GB max=38.87GB]
+step=000081 pass=1/3 win=1/32 local=82/128 lm=7.50132 ppl~1810.44 kd=10.0163 pen=1.81573e-03 lambda=5.000e-05 lr=6.958e-05 gnorm=5.000e-01 admm_rms=5.991e-04 upd_rms=1.860e-01 time=4.17s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000082 pass=1/3 win=1/32 local=83/128 lm=7.46598 ppl~1747.57 kd=11.4844 pen=1.84351e-03 lambda=5.000e-05 lr=6.958e-05 gnorm=5.000e-01 admm_rms=6.036e-04 upd_rms=1.856e-01 time=4.17s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000083 pass=1/3 win=1/32 local=84/128 lm=7.44167 ppl~1705.60 kd=10.0592 pen=1.87085e-03 lambda=5.000e-05 lr=6.957e-05 gnorm=5.000e-01 admm_rms=6.081e-04 upd_rms=1.853e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000084 pass=1/3 win=1/32 local=85/128 lm=7.02119 ppl~1120.12 kd=9.3311 pen=1.89929e-03 lambda=5.000e-05 lr=6.957e-05 gnorm=5.000e-01 admm_rms=6.127e-04 upd_rms=1.874e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000085 pass=1/3 win=1/32 local=86/128 lm=7.60951 ppl~2017.28 kd=10.8375 pen=1.92793e-03 lambda=5.000e-05 lr=6.956e-05 gnorm=5.000e-01 admm_rms=6.173e-04 upd_rms=1.886e-01 time=4.23s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000086 pass=1/3 win=1/32 local=87/128 lm=7.19955 ppl~1338.83 kd=8.3131 pen=1.95727e-03 lambda=5.000e-05 lr=6.956e-05 gnorm=5.000e-01 admm_rms=6.220e-04 upd_rms=1.874e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000087 pass=1/3 win=1/32 local=88/128 lm=7.11100 ppl~1225.37 kd=8.2135 pen=1.98746e-03 lambda=5.000e-05 lr=6.955e-05 gnorm=5.000e-01 admm_rms=6.268e-04 upd_rms=1.882e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000088 pass=1/3 win=1/32 local=89/128 lm=7.15730 ppl~1283.45 kd=9.9925 pen=2.01684e-03 lambda=5.000e-05 lr=6.955e-05 gnorm=5.000e-01 admm_rms=6.314e-04 upd_rms=1.858e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000089 pass=1/3 win=1/32 local=90/128 lm=7.12478 ppl~1242.38 kd=8.2146 pen=2.04683e-03 lambda=5.000e-05 lr=6.954e-05 gnorm=5.000e-01 admm_rms=6.361e-04 upd_rms=1.866e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000090 pass=1/3 win=1/32 local=91/128 lm=7.16527 ppl~1293.71 kd=9.9599 pen=2.07590e-03 lambda=5.000e-05 lr=6.954e-05 gnorm=5.000e-01 admm_rms=6.406e-04 upd_rms=1.875e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000091 pass=1/3 win=1/32 local=92/128 lm=7.11988 ppl~1236.30 kd=7.7516 pen=2.10407e-03 lambda=5.000e-05 lr=6.953e-05 gnorm=5.000e-01 admm_rms=6.449e-04 upd_rms=1.879e-01 time=4.25s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000092 pass=1/3 win=1/32 local=93/128 lm=7.13527 ppl~1255.48 kd=8.7773 pen=2.13128e-03 lambda=5.000e-05 lr=6.953e-05 gnorm=5.000e-01 admm_rms=6.490e-04 upd_rms=1.854e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000093 pass=1/3 win=1/32 local=94/128 lm=7.10474 ppl~1217.73 kd=7.8330 pen=2.15859e-03 lambda=5.000e-05 lr=6.952e-05 gnorm=5.000e-01 admm_rms=6.532e-04 upd_rms=1.866e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000094 pass=1/3 win=1/32 local=95/128 lm=7.04678 ppl~1149.15 kd=8.3833 pen=2.18494e-03 lambda=5.000e-05 lr=6.952e-05 gnorm=5.000e-01 admm_rms=6.572e-04 upd_rms=1.866e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000095 pass=1/3 win=1/32 local=96/128 lm=7.03063 ppl~1130.74 kd=9.0532 pen=2.21113e-03 lambda=5.000e-05 lr=6.951e-05 gnorm=5.000e-01 admm_rms=6.611e-04 upd_rms=1.876e-01 time=4.29s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.5174e-03 proj=fisher
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.0119e-03 proj=fisher
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.0198e-03 proj=fisher
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.2956e-03 proj=fisher
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.2597e-02 proj=fisher
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.3620e-02 proj=fisher
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=8.5721e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.043% elapsed=19s
+step=000096 pass=1/3 win=1/32 local=97/128 lm=7.09388 ppl~1204.57 kd=9.3932 pen=2.22690e-03 lambda=5.000e-05 lr=6.951e-05 gnorm=5.000e-01 admm_rms=6.634e-04 upd_rms=1.878e-01 time=4.13s cuda=[alloc=28.13GB reserved=45.01GB max=38.87GB]
+step=000097 pass=1/3 win=1/32 local=98/128 lm=7.11870 ppl~1234.84 kd=8.6331 pen=2.25285e-03 lambda=5.000e-05 lr=6.950e-05 gnorm=5.000e-01 admm_rms=6.673e-04 upd_rms=1.890e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000098 pass=1/3 win=1/32 local=99/128 lm=7.08870 ppl~1198.35 kd=9.0119 pen=2.28128e-03 lambda=5.000e-05 lr=6.950e-05 gnorm=5.000e-01 admm_rms=6.715e-04 upd_rms=1.853e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000099 pass=1/3 win=1/32 local=100/128 lm=7.20271 ppl~1343.07 kd=8.7317 pen=2.31152e-03 lambda=5.000e-05 lr=6.949e-05 gnorm=5.000e-01 admm_rms=6.759e-04 upd_rms=1.867e-01 time=4.22s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000100 pass=1/3 win=1/32 local=101/128 lm=6.89429 ppl~986.63 kd=8.4895 pen=2.34172e-03 lambda=5.000e-05 lr=6.949e-05 gnorm=5.000e-01 admm_rms=6.803e-04 upd_rms=1.884e-01 time=4.19s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000101 pass=1/3 win=1/32 local=102/128 lm=7.16844 ppl~1297.81 kd=9.7568 pen=2.37239e-03 lambda=5.000e-05 lr=6.948e-05 gnorm=5.000e-01 admm_rms=6.848e-04 upd_rms=1.885e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000102 pass=1/3 win=1/32 local=103/128 lm=6.97769 ppl~1072.44 kd=9.6920 pen=2.40228e-03 lambda=5.000e-05 lr=6.948e-05 gnorm=5.000e-01 admm_rms=6.891e-04 upd_rms=1.856e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000103 pass=1/3 win=1/32 local=104/128 lm=7.04278 ppl~1144.56 kd=7.6596 pen=2.43201e-03 lambda=5.000e-05 lr=6.947e-05 gnorm=5.000e-01 admm_rms=6.933e-04 upd_rms=1.860e-01 time=4.24s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000104 pass=1/3 win=1/32 local=105/128 lm=7.22136 ppl~1368.35 kd=11.4234 pen=2.46072e-03 lambda=5.000e-05 lr=6.947e-05 gnorm=5.000e-01 admm_rms=6.974e-04 upd_rms=1.861e-01 time=4.25s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000105 pass=1/3 win=1/32 local=106/128 lm=7.01968 ppl~1118.43 kd=11.4754 pen=2.48869e-03 lambda=5.000e-05 lr=6.946e-05 gnorm=5.000e-01 admm_rms=7.014e-04 upd_rms=1.862e-01 time=4.26s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000106 pass=1/3 win=1/32 local=107/128 lm=7.03183 ppl~1132.10 kd=9.4729 pen=2.51613e-03 lambda=5.000e-05 lr=6.946e-05 gnorm=5.000e-01 admm_rms=7.052e-04 upd_rms=1.819e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000107 pass=1/3 win=1/32 local=108/128 lm=7.24818 ppl~1405.54 kd=9.6057 pen=2.54313e-03 lambda=5.000e-05 lr=6.945e-05 gnorm=5.000e-01 admm_rms=7.090e-04 upd_rms=1.781e-01 time=4.28s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000108 pass=1/3 win=1/32 local=109/128 lm=6.88311 ppl~975.65 kd=9.0621 pen=2.56925e-03 lambda=5.000e-05 lr=6.945e-05 gnorm=5.000e-01 admm_rms=7.126e-04 upd_rms=1.756e-01 time=4.31s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000109 pass=1/3 win=1/32 local=110/128 lm=7.04595 ppl~1148.20 kd=8.1388 pen=2.59505e-03 lambda=5.000e-05 lr=6.944e-05 gnorm=5.000e-01 admm_rms=7.162e-04 upd_rms=1.807e-01 time=4.29s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000110 pass=1/3 win=1/32 local=111/128 lm=7.15262 ppl~1277.45 kd=11.3929 pen=2.61876e-03 lambda=5.000e-05 lr=6.944e-05 gnorm=5.000e-01 admm_rms=7.194e-04 upd_rms=1.774e-01 time=4.31s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+step=000111 pass=1/3 win=1/32 local=112/128 lm=7.06095 ppl~1165.56 kd=8.1457 pen=2.64270e-03 lambda=5.000e-05 lr=6.943e-05 gnorm=5.000e-01 admm_rms=7.227e-04 upd_rms=1.741e-01 time=4.27s cuda=[alloc=28.13GB reserved=44.68GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.8443e-03 proj=fisher
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.2302e-03 proj=fisher
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.1833e-03 proj=fisher
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.8723e-03 proj=fisher
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.3608e-02 proj=fisher
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.4580e-02 proj=fisher
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=8.9987e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.048% elapsed=19s
+step=000112 pass=1/3 win=1/32 local=113/128 lm=7.22266 ppl~1370.12 kd=8.7616 pen=2.66080e-03 lambda=5.000e-05 lr=6.943e-05 gnorm=5.000e-01 admm_rms=7.252e-04 upd_rms=1.791e-01 time=4.11s cuda=[alloc=28.13GB reserved=45.46GB max=38.87GB]
+step=000113 pass=1/3 win=1/32 local=114/128 lm=7.09792 ppl~1209.44 kd=8.6296 pen=2.68261e-03 lambda=5.000e-05 lr=6.942e-05 gnorm=5.000e-01 admm_rms=7.282e-04 upd_rms=1.747e-01 time=3.97s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000114 pass=1/3 win=1/32 local=115/128 lm=7.00247 ppl~1099.35 kd=8.5739 pen=2.70737e-03 lambda=5.000e-05 lr=6.942e-05 gnorm=5.000e-01 admm_rms=7.315e-04 upd_rms=1.747e-01 time=3.99s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000115 pass=1/3 win=1/32 local=116/128 lm=7.14197 ppl~1263.92 kd=7.9402 pen=2.73277e-03 lambda=5.000e-05 lr=6.941e-05 gnorm=5.000e-01 admm_rms=7.349e-04 upd_rms=1.773e-01 time=4.01s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000116 pass=1/3 win=1/32 local=117/128 lm=7.08912 ppl~1198.85 kd=9.1618 pen=2.75516e-03 lambda=5.000e-05 lr=6.941e-05 gnorm=5.000e-01 admm_rms=7.379e-04 upd_rms=1.778e-01 time=4.03s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000117 pass=1/3 win=1/32 local=118/128 lm=7.17535 ppl~1306.82 kd=8.6417 pen=2.77658e-03 lambda=5.000e-05 lr=6.940e-05 gnorm=5.000e-01 admm_rms=7.408e-04 upd_rms=1.815e-01 time=4.03s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000118 pass=1/3 win=1/32 local=119/128 lm=6.87101 ppl~963.92 kd=8.0685 pen=2.80020e-03 lambda=5.000e-05 lr=6.939e-05 gnorm=5.000e-01 admm_rms=7.440e-04 upd_rms=1.818e-01 time=4.05s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000119 pass=1/3 win=1/32 local=120/128 lm=7.18442 ppl~1318.73 kd=9.8280 pen=2.82571e-03 lambda=5.000e-05 lr=6.939e-05 gnorm=5.000e-01 admm_rms=7.473e-04 upd_rms=1.806e-01 time=4.07s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000120 pass=1/3 win=1/32 local=121/128 lm=6.98782 ppl~1083.36 kd=7.8346 pen=2.85221e-03 lambda=5.000e-05 lr=6.938e-05 gnorm=5.000e-01 admm_rms=7.508e-04 upd_rms=1.820e-01 time=4.07s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000121 pass=1/3 win=1/32 local=122/128 lm=6.83589 ppl~930.66 kd=7.1913 pen=2.88123e-03 lambda=5.000e-05 lr=6.938e-05 gnorm=5.000e-01 admm_rms=7.546e-04 upd_rms=1.805e-01 time=4.08s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000122 pass=1/3 win=1/32 local=123/128 lm=6.80510 ppl~902.44 kd=8.7145 pen=2.91082e-03 lambda=5.000e-05 lr=6.937e-05 gnorm=5.000e-01 admm_rms=7.585e-04 upd_rms=1.831e-01 time=4.09s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000123 pass=1/3 win=1/32 local=124/128 lm=6.94756 ppl~1040.60 kd=8.7169 pen=2.93973e-03 lambda=5.000e-05 lr=6.937e-05 gnorm=5.000e-01 admm_rms=7.623e-04 upd_rms=1.860e-01 time=4.09s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000124 pass=1/3 win=1/32 local=125/128 lm=6.96702 ppl~1061.06 kd=8.3241 pen=2.96763e-03 lambda=5.000e-05 lr=6.936e-05 gnorm=5.000e-01 admm_rms=7.659e-04 upd_rms=1.816e-01 time=4.10s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000125 pass=1/3 win=1/32 local=126/128 lm=6.93080 ppl~1023.31 kd=9.0767 pen=2.99359e-03 lambda=5.000e-05 lr=6.936e-05 gnorm=5.000e-01 admm_rms=7.692e-04 upd_rms=1.775e-01 time=4.09s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000126 pass=1/3 win=1/32 local=127/128 lm=6.89696 ppl~989.26 kd=8.0526 pen=3.01985e-03 lambda=5.000e-05 lr=6.935e-05 gnorm=5.000e-01 admm_rms=7.726e-04 upd_rms=1.781e-01 time=4.11s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+step=000127 pass=1/3 win=1/32 local=128/128 lm=6.73953 ppl~845.17 kd=7.8918 pen=3.04513e-03 lambda=5.000e-05 lr=6.935e-05 gnorm=5.000e-01 admm_rms=7.758e-04 upd_rms=1.827e-01 time=4.09s cuda=[alloc=28.13GB reserved=46.93GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.0.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.1935e-03 proj=fisher
+    [2/7] model.layers.0.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.4318e-03 proj=fisher
+    [3/7] model.layers.0.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.3299e-03 proj=fisher
+    [4/7] model.layers.0.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=5.6984e-03 proj=fisher
+    [5/7] model.layers.0.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.4470e-02 proj=fisher
+    [6/7] model.layers.0.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.5558e-02 proj=fisher
+    [7/7] model.layers.0.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=9.4689e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.051% elapsed=20s
+  saved Adam/Fisher states: m=7 v=7 steps=7
+Finished window 1. CUDA: alloc=25.12GB reserved=25.16GB max=38.87GB
+
+----------------------------------------------------------------------------------------------------
+WINDOW 2/32 | active layers=7
+  active: model.layers.1.self_attn.q_proj
+  active: model.layers.1.self_attn.k_proj
+  active: model.layers.1.self_attn.v_proj
+  active: model.layers.1.self_attn.o_proj
+  active: model.layers.1.mlp.gate_proj
+  active: model.layers.1.mlp.up_proj
+  active: model.layers.1.mlp.down_proj
+CUDA before window: alloc=25.12GB reserved=25.16GB max=38.87GB
+  restored x states: x=0 z_fallback=7 missing=0
+CUDA after optimizer/state load: alloc=28.13GB reserved=28.22GB max=38.87GB
+step=000128 pass=1/3 win=2/32 local=1/128 lm=7.20569 ppl~1347.07 kd=10.5596 pen=0.00000e+00 lambda=5.000e-05 lr=6.934e-05 gnorm=5.000e-01 admm_rms=0.000e+00 upd_rms=2.337e-01 time=4.09s cuda=[alloc=28.13GB reserved=43.61GB max=38.87GB]
+step=000129 pass=1/3 win=2/32 local=2/128 lm=7.19366 ppl~1330.97 kd=8.8113 pen=1.32847e-06 lambda=5.000e-05 lr=6.934e-05 gnorm=5.000e-01 admm_rms=1.620e-05 upd_rms=2.286e-01 time=4.15s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000130 pass=1/3 win=2/32 local=3/128 lm=7.65502 ppl~2111.22 kd=10.0442 pen=3.78786e-06 lambda=5.000e-05 lr=6.933e-05 gnorm=5.000e-01 admm_rms=2.736e-05 upd_rms=2.166e-01 time=4.16s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000131 pass=1/3 win=2/32 local=4/128 lm=6.85959 ppl~952.98 kd=11.4885 pen=7.44502e-06 lambda=5.000e-05 lr=6.933e-05 gnorm=5.000e-01 admm_rms=3.836e-05 upd_rms=2.128e-01 time=4.18s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000132 pass=1/3 win=2/32 local=5/128 lm=7.23006 ppl~1380.31 kd=9.2319 pen=1.14802e-05 lambda=5.000e-05 lr=6.932e-05 gnorm=5.000e-01 admm_rms=4.763e-05 upd_rms=2.069e-01 time=4.19s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000133 pass=1/3 win=2/32 local=6/128 lm=6.80228 ppl~899.90 kd=8.1978 pen=1.63980e-05 lambda=5.000e-05 lr=6.932e-05 gnorm=5.000e-01 admm_rms=5.693e-05 upd_rms=2.069e-01 time=4.20s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000134 pass=1/3 win=2/32 local=7/128 lm=7.24587 ppl~1402.31 kd=9.3902 pen=2.16999e-05 lambda=5.000e-05 lr=6.931e-05 gnorm=5.000e-01 admm_rms=6.549e-05 upd_rms=1.987e-01 time=4.22s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000135 pass=1/3 win=2/32 local=8/128 lm=6.90127 ppl~993.53 kd=8.5464 pen=2.80937e-05 lambda=5.000e-05 lr=6.931e-05 gnorm=5.000e-01 admm_rms=7.452e-05 upd_rms=1.986e-01 time=4.23s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000136 pass=1/3 win=2/32 local=9/128 lm=6.81621 ppl~912.52 kd=9.1647 pen=3.50222e-05 lambda=5.000e-05 lr=6.930e-05 gnorm=5.000e-01 admm_rms=8.320e-05 upd_rms=1.952e-01 time=4.25s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000137 pass=1/3 win=2/32 local=10/128 lm=7.21316 ppl~1357.17 kd=9.1158 pen=4.25005e-05 lambda=5.000e-05 lr=6.930e-05 gnorm=5.000e-01 admm_rms=9.165e-05 upd_rms=1.898e-01 time=4.26s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000138 pass=1/3 win=2/32 local=11/128 lm=7.34674 ppl~1551.13 kd=7.9252 pen=5.02761e-05 lambda=5.000e-05 lr=6.929e-05 gnorm=5.000e-01 admm_rms=9.969e-05 upd_rms=1.888e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000139 pass=1/3 win=2/32 local=12/128 lm=6.25575 ppl~521.00 kd=7.7450 pen=5.84927e-05 lambda=5.000e-05 lr=6.929e-05 gnorm=5.000e-01 admm_rms=1.075e-04 upd_rms=1.861e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000140 pass=1/3 win=2/32 local=13/128 lm=7.12008 ppl~1236.55 kd=12.1008 pen=6.71629e-05 lambda=5.000e-05 lr=6.928e-05 gnorm=5.000e-01 admm_rms=1.152e-04 upd_rms=1.778e-01 time=4.29s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000141 pass=1/3 win=2/32 local=14/128 lm=6.71237 ppl~822.52 kd=8.7934 pen=7.63497e-05 lambda=5.000e-05 lr=6.928e-05 gnorm=5.000e-01 admm_rms=1.228e-04 upd_rms=1.797e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000142 pass=1/3 win=2/32 local=15/128 lm=6.63926 ppl~764.53 kd=9.2931 pen=8.54998e-05 lambda=5.000e-05 lr=6.927e-05 gnorm=5.000e-01 admm_rms=1.300e-04 upd_rms=1.735e-01 time=4.26s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+step=000143 pass=1/3 win=2/32 local=16/128 lm=6.52110 ppl~679.32 kd=8.0638 pen=9.51153e-05 lambda=5.000e-05 lr=6.927e-05 gnorm=5.000e-01 admm_rms=1.371e-04 upd_rms=1.759e-01 time=4.26s cuda=[alloc=28.13GB reserved=43.76GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.1.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.1842e-03 proj=magnitude
+    [2/7] model.layers.1.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.5344e-03 proj=magnitude
+    [3/7] model.layers.1.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.7722e-04 proj=magnitude
+    [4/7] model.layers.1.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.7722e-04 proj=magnitude
+    [5/7] model.layers.1.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.9129e-03 proj=magnitude
+    [6/7] model.layers.1.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.3031e-03 proj=magnitude
+    [7/7] model.layers.1.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=2.7722e-04 proj=magnitude
+  projection done: sparsity=80.00% elapsed=14s
+step=000144 pass=1/3 win=2/32 local=17/128 lm=6.87518 ppl~967.95 kd=9.3460 pen=8.32638e-05 lambda=5.000e-05 lr=6.926e-05 gnorm=5.000e-01 admm_rms=1.283e-04 upd_rms=1.845e-01 time=4.14s cuda=[alloc=28.13GB reserved=44.66GB max=38.87GB]
+step=000145 pass=1/3 win=2/32 local=18/128 lm=6.74261 ppl~847.77 kd=8.6762 pen=9.13099e-05 lambda=5.000e-05 lr=6.926e-05 gnorm=5.000e-01 admm_rms=1.343e-04 upd_rms=1.771e-01 time=4.21s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000146 pass=1/3 win=2/32 local=19/128 lm=6.74919 ppl~853.37 kd=9.3103 pen=1.00430e-04 lambda=5.000e-05 lr=6.925e-05 gnorm=5.000e-01 admm_rms=1.409e-04 upd_rms=1.804e-01 time=4.22s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000147 pass=1/3 win=2/32 local=20/128 lm=7.10189 ppl~1214.26 kd=10.8055 pen=1.10044e-04 lambda=5.000e-05 lr=6.925e-05 gnorm=5.000e-01 admm_rms=1.475e-04 upd_rms=1.821e-01 time=4.23s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000148 pass=1/3 win=2/32 local=21/128 lm=7.08608 ppl~1195.22 kd=9.0542 pen=1.19688e-04 lambda=5.000e-05 lr=6.924e-05 gnorm=5.000e-01 admm_rms=1.538e-04 upd_rms=1.808e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000149 pass=1/3 win=2/32 local=22/128 lm=6.87624 ppl~968.98 kd=8.8698 pen=1.30087e-04 lambda=5.000e-05 lr=6.924e-05 gnorm=5.000e-01 admm_rms=1.604e-04 upd_rms=1.781e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000150 pass=1/3 win=2/32 local=23/128 lm=6.70742 ppl~818.46 kd=7.8254 pen=1.41597e-04 lambda=5.000e-05 lr=6.923e-05 gnorm=5.000e-01 admm_rms=1.673e-04 upd_rms=1.841e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000151 pass=1/3 win=2/32 local=24/128 lm=6.67948 ppl~795.90 kd=8.1728 pen=1.53555e-04 lambda=5.000e-05 lr=6.923e-05 gnorm=5.000e-01 admm_rms=1.742e-04 upd_rms=1.803e-01 time=4.25s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000152 pass=1/3 win=2/32 local=25/128 lm=6.63688 ppl~762.71 kd=10.1246 pen=1.66217e-04 lambda=5.000e-05 lr=6.922e-05 gnorm=5.000e-01 admm_rms=1.813e-04 upd_rms=1.809e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000153 pass=1/3 win=2/32 local=26/128 lm=6.80864 ppl~905.64 kd=8.2763 pen=1.79134e-04 lambda=5.000e-05 lr=6.922e-05 gnorm=5.000e-01 admm_rms=1.882e-04 upd_rms=1.770e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000154 pass=1/3 win=2/32 local=27/128 lm=6.88012 ppl~972.75 kd=7.3794 pen=1.92853e-04 lambda=5.000e-05 lr=6.921e-05 gnorm=5.000e-01 admm_rms=1.952e-04 upd_rms=1.757e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000155 pass=1/3 win=2/32 local=28/128 lm=6.95146 ppl~1044.67 kd=10.4493 pen=2.07006e-04 lambda=5.000e-05 lr=6.921e-05 gnorm=5.000e-01 admm_rms=2.023e-04 upd_rms=1.734e-01 time=4.30s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000156 pass=1/3 win=2/32 local=29/128 lm=6.69654 ppl~809.60 kd=7.0631 pen=2.21069e-04 lambda=5.000e-05 lr=6.920e-05 gnorm=5.000e-01 admm_rms=2.090e-04 upd_rms=1.722e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000157 pass=1/3 win=2/32 local=30/128 lm=7.92305 ppl~2760.17 kd=9.6768 pen=2.34914e-04 lambda=5.000e-05 lr=6.920e-05 gnorm=5.000e-01 admm_rms=2.155e-04 upd_rms=1.695e-01 time=4.29s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000158 pass=1/3 win=2/32 local=31/128 lm=6.69300 ppl~806.74 kd=8.9034 pen=2.48897e-04 lambda=5.000e-05 lr=6.919e-05 gnorm=5.000e-01 admm_rms=2.218e-04 upd_rms=1.657e-01 time=4.32s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000159 pass=1/3 win=2/32 local=32/128 lm=6.57020 ppl~713.51 kd=8.5870 pen=2.62716e-04 lambda=5.000e-05 lr=6.918e-05 gnorm=5.000e-01 admm_rms=2.279e-04 upd_rms=1.741e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.1.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.6148e-03 proj=fisher
+    [2/7] model.layers.1.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.9231e-03 proj=fisher
+    [3/7] model.layers.1.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=2.8141e-03 proj=fisher
+    [4/7] model.layers.1.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.7716e-03 proj=fisher
+    [5/7] model.layers.1.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.8182e-03 proj=fisher
+    [6/7] model.layers.1.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.0838e-03 proj=fisher
+    [7/7] model.layers.1.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.3204e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.006% elapsed=19s
+step=000160 pass=1/3 win=2/32 local=33/128 lm=6.88381 ppl~976.34 kd=8.3539 pen=2.53892e-04 lambda=5.000e-05 lr=6.918e-05 gnorm=5.000e-01 admm_rms=2.240e-04 upd_rms=1.738e-01 time=4.12s cuda=[alloc=28.13GB reserved=44.66GB max=38.87GB]
+step=000161 pass=1/3 win=2/32 local=34/128 lm=6.64566 ppl~769.44 kd=10.1587 pen=2.66117e-04 lambda=5.000e-05 lr=6.917e-05 gnorm=5.000e-01 admm_rms=2.293e-04 upd_rms=1.685e-01 time=4.16s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000162 pass=1/3 win=2/32 local=35/128 lm=6.68279 ppl~798.54 kd=8.0369 pen=2.79522e-04 lambda=5.000e-05 lr=6.917e-05 gnorm=5.000e-01 admm_rms=2.350e-04 upd_rms=1.683e-01 time=4.19s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000163 pass=1/3 win=2/32 local=36/128 lm=6.33278 ppl~562.72 kd=7.0741 pen=2.93300e-04 lambda=5.000e-05 lr=6.916e-05 gnorm=5.000e-01 admm_rms=2.408e-04 upd_rms=1.676e-01 time=4.21s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000164 pass=1/3 win=2/32 local=37/128 lm=6.61684 ppl~747.58 kd=7.3538 pen=3.07874e-04 lambda=5.000e-05 lr=6.916e-05 gnorm=5.000e-01 admm_rms=2.467e-04 upd_rms=1.759e-01 time=4.22s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000165 pass=1/3 win=2/32 local=38/128 lm=6.88388 ppl~976.41 kd=9.2308 pen=3.22365e-04 lambda=5.000e-05 lr=6.915e-05 gnorm=5.000e-01 admm_rms=2.524e-04 upd_rms=1.747e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000166 pass=1/3 win=2/32 local=39/128 lm=6.41688 ppl~612.09 kd=7.2557 pen=3.36696e-04 lambda=5.000e-05 lr=6.915e-05 gnorm=5.000e-01 admm_rms=2.580e-04 upd_rms=1.726e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000167 pass=1/3 win=2/32 local=40/128 lm=6.63895 ppl~764.29 kd=9.4609 pen=3.51291e-04 lambda=5.000e-05 lr=6.914e-05 gnorm=5.000e-01 admm_rms=2.635e-04 upd_rms=1.702e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000168 pass=1/3 win=2/32 local=41/128 lm=6.57395 ppl~716.20 kd=9.6938 pen=3.66816e-04 lambda=5.000e-05 lr=6.914e-05 gnorm=5.000e-01 admm_rms=2.693e-04 upd_rms=1.699e-01 time=4.26s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000169 pass=1/3 win=2/32 local=42/128 lm=6.74490 ppl~849.71 kd=7.5626 pen=3.82918e-04 lambda=5.000e-05 lr=6.913e-05 gnorm=5.000e-01 admm_rms=2.751e-04 upd_rms=1.664e-01 time=4.25s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000170 pass=1/3 win=2/32 local=43/128 lm=6.59500 ppl~731.43 kd=7.5532 pen=3.99020e-04 lambda=5.000e-05 lr=6.913e-05 gnorm=5.000e-01 admm_rms=2.808e-04 upd_rms=1.628e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000171 pass=1/3 win=2/32 local=44/128 lm=6.67641 ppl~793.47 kd=8.5273 pen=4.14813e-04 lambda=5.000e-05 lr=6.912e-05 gnorm=5.000e-01 admm_rms=2.863e-04 upd_rms=1.595e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000172 pass=1/3 win=2/32 local=45/128 lm=6.39706 ppl~600.08 kd=6.7004 pen=4.31169e-04 lambda=5.000e-05 lr=6.912e-05 gnorm=5.000e-01 admm_rms=2.919e-04 upd_rms=1.580e-01 time=4.30s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000173 pass=1/3 win=2/32 local=46/128 lm=6.38915 ppl~595.35 kd=7.3779 pen=4.47543e-04 lambda=5.000e-05 lr=6.911e-05 gnorm=5.000e-01 admm_rms=2.974e-04 upd_rms=1.652e-01 time=4.50s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000174 pass=1/3 win=2/32 local=47/128 lm=6.43055 ppl~620.51 kd=7.9612 pen=4.63386e-04 lambda=5.000e-05 lr=6.911e-05 gnorm=5.000e-01 admm_rms=3.026e-04 upd_rms=1.603e-01 time=4.29s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000175 pass=1/3 win=2/32 local=48/128 lm=6.23449 ppl~510.04 kd=7.7566 pen=4.79262e-04 lambda=5.000e-05 lr=6.910e-05 gnorm=5.000e-01 admm_rms=3.078e-04 upd_rms=1.623e-01 time=4.30s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.1.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.2634e-03 proj=fisher
+    [2/7] model.layers.1.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.4934e-03 proj=fisher
+    [3/7] model.layers.1.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.3020e-03 proj=fisher
+    [4/7] model.layers.1.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.7400e-03 proj=fisher
+    [5/7] model.layers.1.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.7859e-03 proj=fisher
+    [6/7] model.layers.1.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=6.9458e-03 proj=fisher
+    [7/7] model.layers.1.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=1.7246e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.005% elapsed=18s
+step=000176 pass=1/3 win=2/32 local=49/128 lm=6.90607 ppl~998.31 kd=8.1664 pen=4.74357e-04 lambda=5.000e-05 lr=6.910e-05 gnorm=5.000e-01 admm_rms=3.062e-04 upd_rms=1.623e-01 time=4.12s cuda=[alloc=28.13GB reserved=44.66GB max=38.87GB]
+step=000177 pass=1/3 win=2/32 local=50/128 lm=6.64035 ppl~765.36 kd=7.2566 pen=4.89108e-04 lambda=5.000e-05 lr=6.909e-05 gnorm=5.000e-01 admm_rms=3.109e-04 upd_rms=1.650e-01 time=4.14s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000178 pass=1/3 win=2/32 local=51/128 lm=6.34355 ppl~568.81 kd=10.7931 pen=5.04719e-04 lambda=5.000e-05 lr=6.909e-05 gnorm=5.000e-01 admm_rms=3.158e-04 upd_rms=1.627e-01 time=4.19s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000179 pass=1/3 win=2/32 local=52/128 lm=6.48564 ppl~655.66 kd=8.9413 pen=5.20751e-04 lambda=5.000e-05 lr=6.908e-05 gnorm=5.000e-01 admm_rms=3.208e-04 upd_rms=1.638e-01 time=4.19s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000180 pass=1/3 win=2/32 local=53/128 lm=6.26600 ppl~526.37 kd=8.8067 pen=5.37051e-04 lambda=5.000e-05 lr=6.908e-05 gnorm=5.000e-01 admm_rms=3.258e-04 upd_rms=1.593e-01 time=4.21s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000181 pass=1/3 win=2/32 local=54/128 lm=6.51680 ppl~676.41 kd=6.7936 pen=5.54232e-04 lambda=5.000e-05 lr=6.907e-05 gnorm=5.000e-01 admm_rms=3.310e-04 upd_rms=1.584e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000182 pass=1/3 win=2/32 local=55/128 lm=6.56991 ppl~713.30 kd=8.2572 pen=5.72374e-04 lambda=5.000e-05 lr=6.907e-05 gnorm=5.000e-01 admm_rms=3.364e-04 upd_rms=1.626e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000183 pass=1/3 win=2/32 local=56/128 lm=6.49767 ppl~663.60 kd=8.3450 pen=5.90712e-04 lambda=5.000e-05 lr=6.906e-05 gnorm=5.000e-01 admm_rms=3.417e-04 upd_rms=1.650e-01 time=4.31s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000184 pass=1/3 win=2/32 local=57/128 lm=6.45227 ppl~634.14 kd=7.5114 pen=6.08405e-04 lambda=5.000e-05 lr=6.906e-05 gnorm=5.000e-01 admm_rms=3.468e-04 upd_rms=1.564e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000185 pass=1/3 win=2/32 local=58/128 lm=6.62486 ppl~753.60 kd=8.7788 pen=6.26613e-04 lambda=5.000e-05 lr=6.905e-05 gnorm=5.000e-01 admm_rms=3.519e-04 upd_rms=1.513e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000186 pass=1/3 win=2/32 local=59/128 lm=6.41788 ppl~612.70 kd=8.7816 pen=6.44770e-04 lambda=5.000e-05 lr=6.905e-05 gnorm=5.000e-01 admm_rms=3.570e-04 upd_rms=1.584e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000187 pass=1/3 win=2/32 local=60/128 lm=6.04144 ppl~420.50 kd=8.7427 pen=6.62289e-04 lambda=5.000e-05 lr=6.904e-05 gnorm=5.000e-01 admm_rms=3.618e-04 upd_rms=1.617e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000188 pass=1/3 win=2/32 local=61/128 lm=6.40624 ppl~605.61 kd=8.1023 pen=6.79826e-04 lambda=5.000e-05 lr=6.904e-05 gnorm=5.000e-01 admm_rms=3.666e-04 upd_rms=1.615e-01 time=4.30s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000189 pass=1/3 win=2/32 local=62/128 lm=6.18867 ppl~487.20 kd=6.9352 pen=6.97100e-04 lambda=5.000e-05 lr=6.903e-05 gnorm=5.000e-01 admm_rms=3.712e-04 upd_rms=1.617e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000190 pass=1/3 win=2/32 local=63/128 lm=6.37129 ppl~584.81 kd=7.4083 pen=7.13877e-04 lambda=5.000e-05 lr=6.903e-05 gnorm=5.000e-01 admm_rms=3.756e-04 upd_rms=1.581e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000191 pass=1/3 win=2/32 local=64/128 lm=6.57091 ppl~714.02 kd=6.5474 pen=7.31025e-04 lambda=5.000e-05 lr=6.902e-05 gnorm=5.000e-01 admm_rms=3.801e-04 upd_rms=1.595e-01 time=4.29s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.1.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.4889e-03 proj=fisher
+    [2/7] model.layers.1.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.7243e-03 proj=fisher
+    [3/7] model.layers.1.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.6663e-03 proj=fisher
+    [4/7] model.layers.1.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=5.4570e-03 proj=fisher
+    [5/7] model.layers.1.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.5424e-03 proj=fisher
+    [6/7] model.layers.1.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=6.6812e-03 proj=fisher
+    [7/7] model.layers.1.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=2.1323e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.007% elapsed=19s
+step=000192 pass=1/3 win=2/32 local=65/128 lm=6.73902 ppl~844.73 kd=9.4874 pen=7.30087e-04 lambda=5.000e-05 lr=6.902e-05 gnorm=5.000e-01 admm_rms=3.799e-04 upd_rms=1.753e-01 time=4.11s cuda=[alloc=28.13GB reserved=44.66GB max=38.87GB]
+step=000193 pass=1/3 win=2/32 local=66/128 lm=6.24784 ppl~516.90 kd=7.5355 pen=7.45137e-04 lambda=5.000e-05 lr=6.901e-05 gnorm=5.000e-01 admm_rms=3.838e-04 upd_rms=1.674e-01 time=4.18s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000194 pass=1/3 win=2/32 local=67/128 lm=6.18685 ppl~486.31 kd=8.2608 pen=7.61352e-04 lambda=5.000e-05 lr=6.901e-05 gnorm=5.000e-01 admm_rms=3.879e-04 upd_rms=1.604e-01 time=4.18s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000195 pass=1/3 win=2/32 local=68/128 lm=6.14266 ppl~465.29 kd=6.3548 pen=7.78496e-04 lambda=5.000e-05 lr=6.900e-05 gnorm=5.000e-01 admm_rms=3.923e-04 upd_rms=1.623e-01 time=4.20s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000196 pass=1/3 win=2/32 local=69/128 lm=6.56001 ppl~706.28 kd=6.9302 pen=7.95700e-04 lambda=5.000e-05 lr=6.900e-05 gnorm=5.000e-01 admm_rms=3.966e-04 upd_rms=1.675e-01 time=4.21s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000197 pass=1/3 win=2/32 local=70/128 lm=6.27432 ppl~530.76 kd=9.8739 pen=8.12929e-04 lambda=5.000e-05 lr=6.899e-05 gnorm=5.000e-01 admm_rms=4.008e-04 upd_rms=1.688e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000198 pass=1/3 win=2/32 local=71/128 lm=6.25328 ppl~519.72 kd=6.1714 pen=8.30841e-04 lambda=5.000e-05 lr=6.898e-05 gnorm=5.000e-01 admm_rms=4.052e-04 upd_rms=1.727e-01 time=4.22s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000199 pass=1/3 win=2/32 local=72/128 lm=6.45639 ppl~636.76 kd=7.2368 pen=8.49377e-04 lambda=5.000e-05 lr=6.898e-05 gnorm=5.000e-01 admm_rms=4.097e-04 upd_rms=1.700e-01 time=4.24s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000200 pass=1/3 win=2/32 local=73/128 lm=5.89183 ppl~362.07 kd=6.3885 pen=8.68878e-04 lambda=5.000e-05 lr=6.897e-05 gnorm=5.000e-01 admm_rms=4.144e-04 upd_rms=1.662e-01 time=4.32s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000201 pass=1/3 win=2/32 local=74/128 lm=6.15175 ppl~469.54 kd=6.8860 pen=8.89215e-04 lambda=5.000e-05 lr=6.897e-05 gnorm=5.000e-01 admm_rms=4.192e-04 upd_rms=1.633e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000202 pass=1/3 win=2/32 local=75/128 lm=6.42351 ppl~616.16 kd=7.4965 pen=9.09536e-04 lambda=5.000e-05 lr=6.896e-05 gnorm=5.000e-01 admm_rms=4.240e-04 upd_rms=1.633e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000203 pass=1/3 win=2/32 local=76/128 lm=6.04020 ppl~419.98 kd=6.5353 pen=9.29778e-04 lambda=5.000e-05 lr=6.896e-05 gnorm=5.000e-01 admm_rms=4.287e-04 upd_rms=1.650e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000204 pass=1/3 win=2/32 local=77/128 lm=6.33399 ppl~563.40 kd=6.5368 pen=9.49990e-04 lambda=5.000e-05 lr=6.895e-05 gnorm=5.000e-01 admm_rms=4.333e-04 upd_rms=1.604e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000205 pass=1/3 win=2/32 local=78/128 lm=5.96433 ppl~389.29 kd=6.2658 pen=9.69996e-04 lambda=5.000e-05 lr=6.895e-05 gnorm=5.000e-01 admm_rms=4.379e-04 upd_rms=1.673e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000206 pass=1/3 win=2/32 local=79/128 lm=6.08094 ppl~437.44 kd=7.2705 pen=9.89413e-04 lambda=5.000e-05 lr=6.894e-05 gnorm=5.000e-01 admm_rms=4.422e-04 upd_rms=1.650e-01 time=4.30s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000207 pass=1/3 win=2/32 local=80/128 lm=6.12134 ppl~455.47 kd=7.1625 pen=1.00952e-03 lambda=5.000e-05 lr=6.894e-05 gnorm=5.000e-01 admm_rms=4.467e-04 upd_rms=1.688e-01 time=4.29s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.1.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.5563e-03 proj=fisher
+    [2/7] model.layers.1.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.7610e-03 proj=fisher
+    [3/7] model.layers.1.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.9854e-03 proj=fisher
+    [4/7] model.layers.1.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=6.1064e-03 proj=fisher
+    [5/7] model.layers.1.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.2909e-03 proj=fisher
+    [6/7] model.layers.1.mlp.up_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=7.5319e-03 proj=fisher
+    [7/7] model.layers.1.mlp.down_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=2.3878e-03 proj=fisher
+  projection done: sparsity=80.00% mask_drift=0.009% elapsed=18s
+step=000208 pass=1/3 win=2/32 local=81/128 lm=6.67049 ppl~788.78 kd=8.2988 pen=1.01125e-03 lambda=5.000e-05 lr=6.893e-05 gnorm=5.000e-01 admm_rms=4.471e-04 upd_rms=1.758e-01 time=4.09s cuda=[alloc=28.13GB reserved=44.66GB max=38.87GB]
+step=000209 pass=1/3 win=2/32 local=82/128 lm=5.86454 ppl~352.32 kd=6.5365 pen=1.02960e-03 lambda=5.000e-05 lr=6.893e-05 gnorm=5.000e-01 admm_rms=4.511e-04 upd_rms=1.732e-01 time=4.17s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000210 pass=1/3 win=2/32 local=83/128 lm=6.01735 ppl~410.49 kd=6.4836 pen=1.04967e-03 lambda=5.000e-05 lr=6.892e-05 gnorm=5.000e-01 admm_rms=4.555e-04 upd_rms=1.684e-01 time=4.19s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000211 pass=1/3 win=2/32 local=84/128 lm=6.02453 ppl~413.45 kd=6.2779 pen=1.07069e-03 lambda=5.000e-05 lr=6.892e-05 gnorm=5.000e-01 admm_rms=4.600e-04 upd_rms=1.701e-01 time=4.19s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000212 pass=1/3 win=2/32 local=85/128 lm=6.08905 ppl~441.00 kd=8.9004 pen=1.09213e-03 lambda=5.000e-05 lr=6.891e-05 gnorm=5.000e-01 admm_rms=4.646e-04 upd_rms=1.694e-01 time=4.23s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000213 pass=1/3 win=2/32 local=86/128 lm=5.84166 ppl~344.35 kd=6.8837 pen=1.11406e-03 lambda=5.000e-05 lr=6.891e-05 gnorm=5.000e-01 admm_rms=4.693e-04 upd_rms=1.749e-01 time=4.23s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000214 pass=1/3 win=2/32 local=87/128 lm=5.87569 ppl~356.27 kd=6.6566 pen=1.13584e-03 lambda=5.000e-05 lr=6.890e-05 gnorm=5.000e-01 admm_rms=4.738e-04 upd_rms=1.702e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000215 pass=1/3 win=2/32 local=88/128 lm=5.90063 ppl~365.27 kd=5.5470 pen=1.15772e-03 lambda=5.000e-05 lr=6.890e-05 gnorm=5.000e-01 admm_rms=4.784e-04 upd_rms=1.707e-01 time=4.26s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000216 pass=1/3 win=2/32 local=89/128 lm=5.92604 ppl~374.67 kd=6.7679 pen=1.17907e-03 lambda=5.000e-05 lr=6.889e-05 gnorm=5.000e-01 admm_rms=4.827e-04 upd_rms=1.633e-01 time=4.28s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000217 pass=1/3 win=2/32 local=90/128 lm=6.41652 ppl~611.87 kd=7.0687 pen=1.20106e-03 lambda=5.000e-05 lr=6.889e-05 gnorm=5.000e-01 admm_rms=4.872e-04 upd_rms=1.561e-01 time=4.27s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000218 pass=1/3 win=2/32 local=91/128 lm=6.39065 ppl~596.25 kd=6.6582 pen=1.22336e-03 lambda=5.000e-05 lr=6.888e-05 gnorm=5.000e-01 admm_rms=4.917e-04 upd_rms=1.559e-01 time=4.29s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000219 pass=1/3 win=2/32 local=92/128 lm=5.71439 ppl~303.20 kd=5.9201 pen=1.24529e-03 lambda=5.000e-05 lr=6.888e-05 gnorm=5.000e-01 admm_rms=4.961e-04 upd_rms=1.580e-01 time=4.30s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000220 pass=1/3 win=2/32 local=93/128 lm=5.99557 ppl~401.65 kd=6.5689 pen=1.26648e-03 lambda=5.000e-05 lr=6.887e-05 gnorm=5.000e-01 admm_rms=5.003e-04 upd_rms=1.628e-01 time=4.31s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000221 pass=1/3 win=2/32 local=94/128 lm=5.57307 ppl~263.24 kd=6.2303 pen=1.28756e-03 lambda=5.000e-05 lr=6.887e-05 gnorm=5.000e-01 admm_rms=5.045e-04 upd_rms=1.598e-01 time=4.32s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000222 pass=1/3 win=2/32 local=95/128 lm=5.61968 ppl~275.80 kd=6.5491 pen=1.30873e-03 lambda=5.000e-05 lr=6.886e-05 gnorm=5.000e-01 admm_rms=5.086e-04 upd_rms=1.602e-01 time=4.30s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+step=000223 pass=1/3 win=2/32 local=96/128 lm=6.03103 ppl~416.14 kd=6.5767 pen=1.32903e-03 lambda=5.000e-05 lr=6.886e-05 gnorm=5.000e-01 admm_rms=5.125e-04 upd_rms=1.712e-01 time=4.32s cuda=[alloc=28.13GB reserved=43.70GB max=38.87GB]
+
+  ADMM projection update...
+    [1/7] model.layers.1.self_attn.q_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.5095e-03 proj=fisher
+    [2/7] model.layers.1.self_attn.k_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=3.7960e-03 proj=fisher
+    [3/7] model.layers.1.self_attn.v_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=4.2919e-03 proj=fisher
+    [4/7] model.layers.1.self_attn.o_proj: kept=3,355,443/16,777,216 sparsity=80.00% target=80.00% u_absmax=6.6490e-03 proj=fisher
+    [5/7] model.layers.1.mlp.gate_proj: kept=9,017,754/45,088,768 sparsity=80.00% target=80.00% u_absmax=8.1007e-03 proj=fisher

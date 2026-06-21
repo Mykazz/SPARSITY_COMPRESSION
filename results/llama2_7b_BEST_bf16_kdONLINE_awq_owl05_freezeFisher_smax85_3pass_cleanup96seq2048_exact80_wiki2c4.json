@@ -1,0 +1,18 @@
+{
+  "model_id": "compressed/llama2_7b_BEST_bf16_kdONLINE_awq_owl05_freezeFisher_smax85_3pass_cleanup96seq2048_exact80",
+  "data_tag": "llama2",
+  "seqlen": 2048,
+  "dtype": "bfloat16",
+  "wikitext2": {
+    "perplexity": 18.40167880725388,
+    "windows": 166,
+    "seqlen": 2048,
+    "seconds": 48.17266273498535
+  },
+  "c4": {
+    "perplexity": 17.595657148539203,
+    "windows": 256,
+    "seqlen": 2048,
+    "seconds": 77.74256563186646
+  }
+}

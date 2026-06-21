@@ -1,0 +1,43 @@
+{
+  "input_file": "data/eval_wikitext103_test_shared_250k.txt",
+  "model_id": "compressed/mistral_ABL_uniform80_owl0.5_NOcleanup_kd72_top256_exact80_fp16",
+  "model_variant": "original_fp",
+  "compressed": null,
+  "raw_chars": 992803,
+  "tokenized_length": 250000,
+  "block_size": 1024,
+  "stride": 1024,
+  "batch_size": 1,
+  "load_mode": "fp",
+  "dtype": "float16",
+  "add_bos_token": false,
+  "cache_dequantized": false,
+  "tokenization_stats": {
+    "read_seconds": 0.0016946792602539062,
+    "tokenize_seconds": 0.7659256458282471,
+    "raw_chars": 992803,
+    "tokens": 250000,
+    "chars_per_second_read": 585835339.6330894,
+    "tokens_per_second_tokenize": 326402.44044793426
+  },
+  "metrics": {
+    "mean_loss": 3.1330440539619517,
+    "perplexity": 22.94371525628146,
+    "bits_per_token": 4.520027119537562,
+    "top1_accuracy": 0.445189780759123,
+    "tokens_evaluated": 249999,
+    "batches_evaluated": 245,
+    "windows_evaluated": 245,
+    "processed_windows": 245,
+    "expected_windows": 245,
+    "stride_used": 1024,
+    "evaluation_mode": "non-overlapping",
+    "elapsed_seconds": 37.30257558822632,
+    "tokens_per_second": 6701.923287005048,
+    "windows_per_second": 6.567911092909319,
+    "batches_per_second": 6.567911092909319
+  },
+  "total_script_seconds": 42.22314190864563,
+  "cuda_memory": "allocated=13.51GB reserved=14.09GB peak=13.82GB",
+  "compression_info": {}
+}

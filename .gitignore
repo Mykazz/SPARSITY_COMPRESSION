@@ -33,3 +33,8 @@ logs/*.txt
 
 # Misc
 token_mailer/
+
+# data: keep calib + eval text, drop regenerable caches and the oversized 8192 calib
+data/eval_cache/
+data/kd_cache_*/
+data/calib_wikitext103_train_8192x2048_mistral.pt

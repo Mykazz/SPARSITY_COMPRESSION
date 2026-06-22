@@ -1,0 +1,15 @@
+{
+  "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
+  "shape": [
+    8192,
+    2048
+  ],
+  "tokens": 16777216,
+  "source_text_file": null,
+  "dataset": "Salesforce/wikitext",
+  "dataset_config": "wikitext-103-raw-v1",
+  "split": "train",
+  "docs_seen": 143988,
+  "seed": 1337,
+  "elapsed_seconds": 38.549200773239136
+}

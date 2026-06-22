@@ -1,0 +1,15 @@
+{
+  "model_id": "meta-llama/Meta-Llama-3-8B-Instruct",
+  "shape": [
+    4096,
+    2048
+  ],
+  "tokens": 8388608,
+  "source_text_file": null,
+  "dataset": "Salesforce/wikitext",
+  "dataset_config": "wikitext-103-raw-v1",
+  "split": "train",
+  "docs_seen": 81440,
+  "seed": 1337,
+  "elapsed_seconds": 32.55809164047241
+}
